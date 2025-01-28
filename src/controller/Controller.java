@@ -18,6 +18,9 @@ public class Controller {
     private Controller(){
         dbBroker=new DBBroker();
     }
+    
+    
+    
 
     public static Controller getInstance() {
         if(instance==null)
