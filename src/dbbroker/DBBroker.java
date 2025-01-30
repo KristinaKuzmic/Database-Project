@@ -33,7 +33,7 @@ public class DBBroker {
 
         try {
             Properties properties = new Properties();
-            String propertiesFileName = "config/dbconfig";
+            String propertiesFileName = "config/dbconfig.properties";
             FileInputStream fis = new FileInputStream(propertiesFileName);
             properties.load(fis);
             

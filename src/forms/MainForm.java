@@ -4,6 +4,8 @@
  */
 package forms;
 
+import controller.Controller;
+
 /**
  *
  * @author Kristina
@@ -73,6 +75,7 @@ public class MainForm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainForm().setVisible(true);
+                Controller.getInstance();
             }
         });
     }
