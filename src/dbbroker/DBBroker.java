@@ -58,6 +58,7 @@ public class DBBroker {
         try {
             connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new Exception("Connection error");
         }        
     }
@@ -102,7 +103,7 @@ public class DBBroker {
     public List<DomainObject> getAll(DomainObject object) throws SQLException{
         Statement statement = connection.createStatement();
         String query = "select " + object.getAllColumnNames() + " from "
-                +object.getTableName() + " order by " + object.getOrderByColumn();
+                +object.getTableName() + object.alijas() + " " + object.getJoin() + " order by " + object.getOrderByColumn();
         System.out.println(query);
         ResultSet rs = statement.executeQuery(query);
         return object.getObjectsFromResultSet(rs);
@@ -111,7 +112,8 @@ public class DBBroker {
      public List<DomainObject> getAllWithWhere(DomainObject object, String whereClause) throws SQLException{
         Statement statement = connection.createStatement();
         String query = "select " + object.getAllColumnNames() + " from "
-                +object.getTableName() + " where " + whereClause +  " order by " + object.getOrderByColumn();
+                +object.getTableName() + object.alijas()+ " " + object.getJoin()
+                +  " where " + whereClause +  " order by " + object.getOrderByColumn();
         System.out.println(query);
         ResultSet rs = statement.executeQuery(query);
         return object.getObjectsFromResultSet(rs);

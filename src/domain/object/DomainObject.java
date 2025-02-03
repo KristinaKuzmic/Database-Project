@@ -16,6 +16,10 @@ public abstract class DomainObject {
 
     public abstract String getTableName();
 
+    public abstract String alijas();
+    
+    public abstract String getJoin();
+    
     public abstract String getAllColumnNames();
 
     public abstract String getAllInsertColumnNames();

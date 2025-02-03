@@ -20,6 +20,17 @@ public class NivoStudija extends DomainObject{
     private String trajanje;
     private int espb;
 
+    public NivoStudija() {
+    }
+
+    public NivoStudija(Long nivoId, String naziv, String trajanje, int espb) {
+        this.nivoId = nivoId;
+        this.naziv = naziv;
+        this.trajanje = trajanje;
+        this.espb = espb;
+    }
+
+    
     public Long getNivoId() {
         return nivoId;
     }
@@ -101,6 +112,16 @@ public class NivoStudija extends DomainObject{
 
     @Override
     public String getOrderByColumn() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String alijas() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String getJoin() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

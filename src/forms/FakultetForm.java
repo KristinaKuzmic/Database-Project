@@ -4,17 +4,43 @@
  */
 package forms;
 
+import controller.Controller;
+import domain.object.entities.Fakultet;
+import domain.object.entities.NivoStudija;
+import domain.object.entities.StudijskiProgram;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicListUI;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Kristina
  */
 public class FakultetForm extends javax.swing.JFrame {
 
+    List<Fakultet> fakulteti = new LinkedList<Fakultet>();
+    List<Fakultet> pronadjeniFakulteti = new LinkedList<>();
+    List<StudijskiProgram> studijskiProgrami = new LinkedList<>();
+    List<StudijskiProgram> pronadjeniProgrami = new LinkedList<>();
+    HashMap<Integer, String[]> orinalneVrednostiPrograma = new HashMap<>();
+
     /**
      * Creates new form FakultetForm
      */
-    public FakultetForm() {
+    public FakultetForm() throws Exception {
         initComponents();
+        setLocationRelativeTo(null);
+        loadDataIntoForm();
+        setUpTableListenerTblFakultet();
+        setUpTableLiistenerTblStudijskiProgram();
+
     }
 
     /**
@@ -40,7 +66,7 @@ public class FakultetForm extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         btnSacuvaj = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblProgram = new javax.swing.JTable();
         btnIzmeniFakultet = new javax.swing.JButton();
         btnObrisi = new javax.swing.JButton();
         btnIzmeniProgram = new javax.swing.JButton();
@@ -49,13 +75,10 @@ public class FakultetForm extends javax.swing.JFrame {
 
         tblFakultet.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
-                "Fakultet id", "Naziv fakulteta"
+                "Fakultet id", "Naziv"
             }
         ));
         jScrollPane1.setViewportView(tblFakultet);
@@ -68,26 +91,32 @@ public class FakultetForm extends javax.swing.JFrame {
 
         jLabel4.setText("Nivo studija");
 
-        cmbNivo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbNivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbNivoActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Naziv fakulteta");
 
         jLabel6.setText("Studijski program");
 
         btnSacuvaj.setText("sacuvaj");
+        btnSacuvaj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSacuvajActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblProgram.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Program id", "Fakultet id", "Naziv studijskog programa", "Nivo id", "Naziv fakulteta"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(tblProgram);
 
         btnIzmeniFakultet.setText("izmeni");
         btnIzmeniFakultet.addActionListener(new java.awt.event.ActionListener() {
@@ -104,6 +133,11 @@ public class FakultetForm extends javax.swing.JFrame {
         });
 
         btnIzmeniProgram.setText("izmeni");
+        btnIzmeniProgram.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIzmeniProgramActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -192,13 +226,60 @@ public class FakultetForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIzmeniFakultetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmeniFakultetActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            
+            Fakultet fakultet = izabraniFakultet();
+            Controller.getInstance().updateFakultet(fakultet);
+            popuniTabeluProgramima(fakultet.getFakultetId());
+        } catch (Exception ex) {
+            Logger.getLogger(FakultetForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnIzmeniFakultetActionPerformed
 
     private void btnObrisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            
+            StudijskiProgram sp = izabraniProgram();
+            Controller.getInstance().deleteProgram(sp);
+            popuniTabeluProgramima(sp.getFakultet().getFakultetId());
+        } catch (Exception ex) {
+            Logger.getLogger(FakultetForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
     }//GEN-LAST:event_btnObrisiActionPerformed
 
+    private void cmbNivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNivoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbNivoActionPerformed
+
+    private void btnSacuvajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacuvajActionPerformed
+        try {
+            // TODO add your handling code here:
+            
+            StudijskiProgram sp = preuzmiPodatke();
+            
+            Controller.getInstance().insertProgram(sp);
+            
+            StudijskiProgram studijskiProgram = izabraniProgram();
+            
+            popuniTabeluProgramima(studijskiProgram.getFakultet().getFakultetId());
+        } catch (Exception ex) {
+            Logger.getLogger(FakultetForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnSacuvajActionPerformed
+
+    private void btnIzmeniProgramActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmeniProgramActionPerformed
+        // TODO add your handling code here:
+        
+        StudijskiProgram sp = izabraniProgram();
+        String setClause = generisiSetClause(tblProgram,tblProgram.getSelectedRow());
+        
+        Controller.getInstance().updateProgram(sp, setClause);
+        
+        ucitajPrograme();
+    }//GEN-LAST:event_btnIzmeniProgramActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -206,7 +287,7 @@ public class FakultetForm extends javax.swing.JFrame {
     private javax.swing.JButton btnIzmeniProgram;
     private javax.swing.JButton btnObrisi;
     private javax.swing.JButton btnSacuvaj;
-    private javax.swing.JComboBox<String> cmbNivo;
+    private javax.swing.JComboBox<Object> cmbNivo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -215,10 +296,205 @@ public class FakultetForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable tblFakultet;
+    private javax.swing.JTable tblProgram;
     private javax.swing.JTextField txtNaziv;
     private javax.swing.JTextField txtNazivFakulteta;
     private javax.swing.JTextField txtProgramId;
     // End of variables declaration//GEN-END:variables
+
+    private void loadDataIntoForm() throws Exception {
+        getAllFakultet();
+    }
+
+    private void getAllFakultet() throws Exception {
+        DefaultTableModel dfm = (DefaultTableModel) tblFakultet.getModel();
+
+        fakulteti = Controller.getInstance().getAllFakulteti();
+
+        for (Fakultet fakultet : fakulteti) {
+            dfm.addRow(new Object[]{fakultet.getFakultetId(), fakultet.getNaziv()});
+        }
+
+    }
+
+    private Fakultet izabraniFakultet() {
+        Long fakultetId = 0l;
+        String naziv = "";
+        if (tblFakultet.getSelectedRow() >= 0) {
+            DefaultTableModel dtm = (DefaultTableModel) tblFakultet.getModel();
+            fakultetId = (Long) dtm.getValueAt(tblFakultet.getSelectedRow(), 0);
+            naziv = (String) dtm.getValueAt(tblFakultet.getSelectedRow(), 1);
+        }
+        Fakultet fakultet = new Fakultet();
+        fakultet.setFakultetId(fakultetId);
+        fakultet.setNaziv(naziv);
+
+        return fakultet;
+    }
+
+    private void popuniTabeluProgramima(Long fakultetId) throws Exception {
+        DefaultTableModel dfm = (DefaultTableModel) tblProgram.getModel();
+        //dfm.setRowCount(0);       
+        studijskiProgrami = Controller.getInstance().findProgrami("fakultetid='" + String.valueOf(fakultetId) + "'");
+        for (StudijskiProgram sp : studijskiProgrami) {
+            dfm.addRow(new Object[]{sp.getProgramId(), sp.getFakultet().getFakultetId(), sp.getNaziv(), sp.getNivoStudija().getNaziv(), sp.getNazivFakulteta()});
+        }
+    }
+
+    private void sacuvajOriginalneVrednosti(JTable tblFakultet) {
+        DefaultTableModel dfm = (DefaultTableModel) tblFakultet.getModel();
+
+        for (int i = 0; i < dfm.getRowCount(); i++) {
+            Long programId = (Long) dfm.getValueAt(i, 0);
+            Long fakultetId = (Long) dfm.getValueAt(i, 1);
+            String nazivPrograma = (String) dfm.getValueAt(i, 2);
+            String nazivNivoa = (String) dfm.getValueAt(i, 3);
+            String nazivFakulteta = (String) dfm.getValueAt(i, 4);
+
+            orinalneVrednostiPrograma.put(i, new String[]{String.valueOf(programId), String.valueOf(fakultetId),
+                nazivPrograma, nazivNivoa, nazivFakulteta});
+
+        }
+    }
+
+    private void setUpTableListenerTblFakultet() {
+        tblFakultet.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    try {
+                        Fakultet izabraniFakultet = izabraniFakultet();
+                        pronadjeniFakulteti = Controller.getInstance().findFakultet("fakultetid='" + String.valueOf(izabraniFakultet.getFakultetId()) + "'");
+
+                        if (pronadjeniFakulteti != null && !pronadjeniFakulteti.isEmpty()) {
+                            izabraniFakultet = pronadjeniFakulteti.get(0);
+                        }
+                        System.out.println(pronadjeniFakulteti);
+                        System.out.println(izabraniFakultet.getFakultetId());
+                        //popunjavam tabelu studijski program
+
+                        popuniTabeluProgramima(izabraniFakultet.getFakultetId());
+                        orinalneVrednostiPrograma.clear();
+                        sacuvajOriginalneVrednosti(tblFakultet);
+
+                    } catch (Exception ex) {
+                    }
+                }
+            }
+
+        });
+    }
+
+    private StudijskiProgram izabraniProgram() {
+        Long programid = 0l;
+        Long fakultetid = 0l;
+        String nazivP = null;
+        String nivoS = null;
+        String nazivFak = null;
+
+        int izabraniP = tblProgram.getSelectedRow();
+        if (izabraniP >= 0) {
+            DefaultTableModel dfm = (DefaultTableModel) tblProgram.getModel();
+            programid = (Long) dfm.getValueAt(izabraniP, 0);
+            fakultetid = (Long) dfm.getValueAt(izabraniP, 1);
+            nazivP = (String) dfm.getValueAt(izabraniP, 2);
+            nivoS = (String) dfm.getValueAt(izabraniP, 3);
+            nazivFak = (String) dfm.getValueAt(izabraniP, 4);
+        }
+
+        StudijskiProgram sp = new StudijskiProgram();
+        sp.setProgramId(programid);
+        sp.setNaziv(nazivP);
+        sp.setNazivFakulteta(nazivFak);
+        NivoStudija ns = new NivoStudija();
+        ns.setNaziv(nivoS);
+        sp.setNivoStudija(ns);
+        return sp;
+    }
+
+    private void popuniFormuProgram(StudijskiProgram izabraniProgram) {
+        txtProgramId.setText(String.valueOf(izabraniProgram.getProgramId()));
+        txtNaziv.setText(izabraniProgram.getNaziv());
+        txtNazivFakulteta.setText(izabraniProgram().getNazivFakulteta());
+        cmbNivo.addItem(izabraniProgram.getNivoStudija().getNaziv());
+        cmbNivo.setSelectedItem(izabraniProgram.getNivoStudija().getNaziv()); 
+    }
+
+    private void setUpTableLiistenerTblStudijskiProgram() {
+        tblProgram.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    try {
+                        StudijskiProgram izabraniProgram = izabraniProgram();
+                        pronadjeniProgrami = Controller.getInstance().findProgrami("programid = '" + String.valueOf(izabraniProgram.getProgramId()) + "'");
+                        if (pronadjeniProgrami != null && !pronadjeniProgrami.isEmpty()) {
+                            izabraniProgram = pronadjeniProgrami.get(0);
+                        }
+                        //popunjavam formu sa podacima iz programa
+
+                        popuniFormuProgram(izabraniProgram);
+                    } catch (Exception ex) {
+                    }
+                }
+            }
+
+        });
+    }
+    
+     private void reloadGridProgram(){
+        tblProgram = new javax.swing.JTable();
+        jScrollPane2.setViewportView(tblProgram);
+        tblProgram.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Program id", "Fakultet id", "Naziv studijskog programa", "Nivo studija", "Naziv  fakulteta"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, true, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        this.setUpTableLiistenerTblStudijskiProgram();
+    }
+
+    private StudijskiProgram preuzmiPodatke() {
+        Long programId = Long.parseLong(txtProgramId.getText());
+        String nazivP = txtNaziv.getText();
+        Long fakultetId = izabraniFakultet().getFakultetId();
+        
+        StudijskiProgram sp = new StudijskiProgram();
+        sp.setProgramId(programId);
+        sp.setNaziv(nazivP);
+        sp.setFakultet(izabraniFakultet());
+        return sp;
+    }
+
+    private String generisiSetClause(JTable tblProgram, int selectedRow) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private void ucitajPrograme() {
+        DefaultTableModel dfm = (DefaultTableModel) tblProgram.getModel();
+        
+        studijskiProgrami = Controller.getInstance().getAllProgrami();
+        
+        for (StudijskiProgram sp : studijskiProgrami) {
+            dfm.addRow(new Object[]{sp.getProgramId(), sp.getFakultet().getFakultetId(), sp.getNaziv(), sp.getNivoStudija().getNaziv(), sp.getNazivFakulteta()});
+        }
+    }
 }

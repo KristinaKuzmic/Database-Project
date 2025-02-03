@@ -7,6 +7,7 @@ package domain.object.entities;
 import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +19,17 @@ public class Fakultet extends DomainObject{
     private Long fakultetId;
     private String naziv;
     private Univerzitet univerzitet;
+
+    public Fakultet() {
+    }
+
+    public Fakultet(Long fakultetId, String naziv, Univerzitet univerzitet) {
+        this.fakultetId = fakultetId;
+        this.naziv = naziv;
+        this.univerzitet = univerzitet;
+    }
+    
+    
 
     public Long getFakultetId() {
         return fakultetId;
@@ -47,12 +59,12 @@ public class Fakultet extends DomainObject{
 
     @Override
     public String getTableName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "fakultet";
     }
 
     @Override
     public String getAllColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "*";
     }
 
     @Override
@@ -67,7 +79,7 @@ public class Fakultet extends DomainObject{
 
     @Override
     public String getUpdateClause() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return String.format("fakultetid = %d, naziv= '%s'", this.fakultetId, this.naziv);
     }
 
     @Override
@@ -77,7 +89,7 @@ public class Fakultet extends DomainObject{
 
     @Override
     public String getUpdateWhereClause() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return String.format("fakultetid = %d", this.fakultetId);
     }
 
     @Override
@@ -87,12 +99,39 @@ public class Fakultet extends DomainObject{
 
     @Override
     public List<DomainObject> getObjectsFromResultSet(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<DomainObject> fakulteti = new ArrayList<>();
+        while(rs.next()){
+            
+            String nazivU = rs.getString(5);
+            Long univerzitetid = rs.getLong(4);
+            
+            Univerzitet univerzitet = new Univerzitet(univerzitetid, nazivU);
+            
+            Long fakultetid = rs.getLong("fakultetid");
+            String naziv = rs.getString("naziv");
+            
+            
+            Fakultet fakultet = new Fakultet(fakultetid, naziv, univerzitet);
+            //System.out.println(fakultet);
+            fakulteti.add(fakultet);
+        }
+        return fakulteti;
     }
 
     @Override
     public String getOrderByColumn() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " fakultetid ";
     }
+
+    @Override
+    public String alijas() {
+        return " f ";
+    }
+
+    @Override
+    public String getJoin() {
+        return "join univerzitet u on (f.univerzitetid = u.univerzitetid)";
+    }
+    
     
 }
