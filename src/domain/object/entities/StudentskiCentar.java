@@ -18,6 +18,16 @@ public class StudentskiCentar extends DomainObject{
     private Long scId;
     private String naziv;
 
+    public StudentskiCentar() {
+    }
+
+    public StudentskiCentar(Long scId, String naziv) {
+        this.scId = scId;
+        this.naziv = naziv;
+    }
+    
+    
+
     public String getNaziv() {
         return naziv;
     }
@@ -83,6 +93,16 @@ public class StudentskiCentar extends DomainObject{
 
     @Override
     public String getOrderByColumn() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String alijas() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String getJoin() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

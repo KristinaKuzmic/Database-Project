@@ -29,6 +29,37 @@ public class Uplatnica extends DomainObject{
     private StudentskiCentar sc;
     private Student student;
     private Valuta valuta;
+    private String nazivStudentskogCentra;
+
+    public Uplatnica() {
+    }
+
+    public Uplatnica(Long uplatnicaId, Date datum, int iznos, int pozivNaBroj, int sifraPlacanja, String Mesto, int model, String racunPlatioca, String racunPrimaoca, String svrhaUplate, StudentskiCentar sc, Student student, Valuta valuta, String nazivStudentskogCentra) {
+        this.uplatnicaId = uplatnicaId;
+        this.datum = datum;
+        this.iznos = iznos;
+        this.pozivNaBroj = pozivNaBroj;
+        this.sifraPlacanja = sifraPlacanja;
+        this.Mesto = Mesto;
+        this.model = model;
+        this.racunPlatioca = racunPlatioca;
+        this.racunPrimaoca = racunPrimaoca;
+        this.svrhaUplate = svrhaUplate;
+        this.sc = sc;
+        this.student = student;
+        this.valuta = valuta;
+        this.nazivStudentskogCentra = nazivStudentskogCentra;
+    }
+
+    public String getNazivStudentskogCentra() {
+        return nazivStudentskogCentra;
+    }
+
+    public void setNazivStudentskogCentra(String nazivStudentskogCentra) {
+        this.nazivStudentskogCentra = nazivStudentskogCentra;
+    }
+    
+    
 
     public Long getUplatnicaId() {
         return uplatnicaId;
@@ -183,6 +214,16 @@ public class Uplatnica extends DomainObject{
 
     @Override
     public String getOrderByColumn() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String alijas() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public String getJoin() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

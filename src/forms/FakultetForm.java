@@ -335,7 +335,7 @@ public class FakultetForm extends javax.swing.JFrame {
 
     private void popuniTabeluProgramima(Long fakultetId) throws Exception {
         DefaultTableModel dfm = (DefaultTableModel) tblProgram.getModel();
-        //dfm.setRowCount(0);       
+        dfm.setRowCount(0);       
         studijskiProgrami = Controller.getInstance().findProgrami("fakultetid='" + String.valueOf(fakultetId) + "'");
         for (StudijskiProgram sp : studijskiProgrami) {
             dfm.addRow(new Object[]{sp.getProgramId(), sp.getFakultet().getFakultetId(), sp.getNaziv(), sp.getNivoStudija().getNaziv(), sp.getNazivFakulteta()});
@@ -370,10 +370,8 @@ public class FakultetForm extends javax.swing.JFrame {
                         if (pronadjeniFakulteti != null && !pronadjeniFakulteti.isEmpty()) {
                             izabraniFakultet = pronadjeniFakulteti.get(0);
                         }
-                        System.out.println(pronadjeniFakulteti);
-                        System.out.println(izabraniFakultet.getFakultetId());
                         //popunjavam tabelu studijski program
-
+                        
                         popuniTabeluProgramima(izabraniFakultet.getFakultetId());
                         orinalneVrednostiPrograma.clear();
                         sacuvajOriginalneVrednosti(tblFakultet);

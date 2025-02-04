@@ -7,6 +7,7 @@ package controller;
 import dbbroker.DBBroker;
 import domain.object.entities.Fakultet;
 import domain.object.entities.StudijskiProgram;
+import domain.object.entities.Uplatnica;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -65,6 +66,18 @@ public class Controller {
     }
 
     public void deleteProgram(StudijskiProgram sp) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void updateProgram(StudijskiProgram sp, String setClause) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public List<StudijskiProgram> getAllProgrami() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public List<Uplatnica> getAllUplatnica() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
