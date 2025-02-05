@@ -167,7 +167,7 @@ public class FakultetForm extends javax.swing.JFrame {
                                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(txtNazivFakulteta, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)))))
-                        .addContainerGap(358, Short.MAX_VALUE))
+                        .addContainerGap(382, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -175,7 +175,7 @@ public class FakultetForm extends javax.swing.JFrame {
                                 .addComponent(btnIzmeniFakultet))
                             .addComponent(jScrollPane2)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 3, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(btnIzmeniProgram)
@@ -340,10 +340,11 @@ public class FakultetForm extends javax.swing.JFrame {
         for (StudijskiProgram sp : studijskiProgrami) {
             dfm.addRow(new Object[]{sp.getProgramId(), sp.getFakultet().getFakultetId(), sp.getNaziv(), sp.getNivoStudija().getNaziv(), sp.getNazivFakulteta()});
         }
+        //System.out.println(orinalneVrednostiPrograma);
     }
 
     private void sacuvajOriginalneVrednosti(JTable tblFakultet) {
-        DefaultTableModel dfm = (DefaultTableModel) tblFakultet.getModel();
+        DefaultTableModel dfm = (DefaultTableModel) tblProgram.getModel();
 
         for (int i = 0; i < dfm.getRowCount(); i++) {
             Long programId = (Long) dfm.getValueAt(i, 0);
@@ -375,7 +376,7 @@ public class FakultetForm extends javax.swing.JFrame {
                         popuniTabeluProgramima(izabraniFakultet.getFakultetId());
                         orinalneVrednostiPrograma.clear();
                         sacuvajOriginalneVrednosti(tblFakultet);
-
+                        System.out.println(orinalneVrednostiPrograma);
                     } catch (Exception ex) {
                     }
                 }
@@ -483,7 +484,38 @@ public class FakultetForm extends javax.swing.JFrame {
     }
 
     private String generisiSetClause(JTable tblProgram, int selectedRow) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        DefaultTableModel dfm = (DefaultTableModel) tblProgram.getModel();
+        StringBuilder stringBuilder = new StringBuilder(" ");
+        
+        Long fakultetId = (Long) dfm.getValueAt(selectedRow, 1);
+        String nazivPrograma = (String) dfm.getValueAt(selectedRow, 2);
+        String nazivFakulteta = (String) dfm.getValueAt(selectedRow, 4);
+        
+        String[] original = orinalneVrednostiPrograma.get(selectedRow);
+        String orgFakultetid = original[1];
+        String orgFakultetIdString = fakultetId.toString();
+        
+        String orgNaziv = original[2];
+        String orgFakultetNaziv = original[4];
+        
+        boolean needComma = false;
+        
+         if(!orgFakultetIdString.equals(orgFakultetid)) {
+            stringBuilder.append("fakultetid = '").append(orgFakultetIdString).append("' ");
+            needComma = true;
+        }
+        if (!nazivPrograma.equals(orgNaziv)) {
+            stringBuilder.append("NAZIV = '").append(nazivPrograma).append("'");
+            needComma = true;
+        }
+        if (!nazivFakulteta.equals(orgFakultetNaziv)) {
+            if (needComma) {
+                stringBuilder.append(", ");
+            }
+            stringBuilder.append("naziv_fakulteta = '").append(nazivFakulteta).append("'");
+        }
+        
+        return stringBuilder.toString();
     }
 
     private void ucitajPrograme() {

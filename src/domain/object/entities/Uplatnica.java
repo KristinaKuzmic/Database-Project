@@ -109,7 +109,7 @@ public class Uplatnica extends DomainObject{
         this.Mesto = Mesto;
     }
 
-    public int getModel() {
+    public int getModel1() {
         return model;
     }
 

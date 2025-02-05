@@ -6,8 +6,11 @@ package controller;
 
 import dbbroker.DBBroker;
 import domain.object.entities.Fakultet;
+import domain.object.entities.Student;
+import domain.object.entities.StudentskiCentar;
 import domain.object.entities.StudijskiProgram;
 import domain.object.entities.Uplatnica;
+import domain.object.entities.Valuta;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -80,4 +83,38 @@ public class Controller {
     public List<Uplatnica> getAllUplatnica() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    public List<StudentskiCentar> getAllStudentskiCentar() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public List<Student> getAllStudent() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public List<Valuta> getAllValuta() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public List<StudentskiCentar> findCentar(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void updateUplatnica(Uplatnica u, String setClause) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void insertUplatnica(Uplatnica u) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void insertStudentskiCentar(StudentskiCentar sc) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void updateStudentskiCentar(StudentskiCentar sc) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+
 }

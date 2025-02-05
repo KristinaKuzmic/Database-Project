@@ -4,6 +4,7 @@
  */
 package forms.models;
 
+import controller.Controller;
 import domain.object.entities.Uplatnica;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -48,13 +49,15 @@ public class ModelTabeleUplatnica extends AbstractTableModel {
             case 2:
                 return u.getIznos();
             case 3:
+                return u.getSc().getScId();
+            case 4:
                 return u.getNazivStudentskogCentra();
             default:
                 throw new AssertionError();
         }
     }
-    
-     @Override
+
+    @Override
     public String getColumnName(int column) {
         switch (column) {
             case 0:
@@ -64,15 +67,16 @@ public class ModelTabeleUplatnica extends AbstractTableModel {
             case 2:
                 return "Iznos";
             case 3:
+                return "Studentski centar id";
+            case 4:
                 return "Naziv studentskog centra";
             default:
                 throw new AssertionError();
         }
     }
-    
-    /*public void osvezi(String ime) throws Exception{
-         clanovi = Communication.getInstance().vratiClanove(ime);
-         fireTableDataChanged();
-    }*/
 
+    public void osvezi() throws Exception{
+         uplatnice = Controller.getInstance().getAllUplatnica();
+         fireTableDataChanged();
+    }
 }

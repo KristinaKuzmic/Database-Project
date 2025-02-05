@@ -5,7 +5,24 @@
 package forms;
 
 import controller.Controller;
+import domain.object.entities.Student;
+import domain.object.entities.StudentskiCentar;
+import domain.object.entities.Uplatnica;
+import domain.object.entities.Valuta;
 import forms.models.ModelTabeleUplatnica;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -13,12 +30,27 @@ import forms.models.ModelTabeleUplatnica;
  */
 public class UplatnicaForm extends javax.swing.JFrame {
 
+    List<Uplatnica> uplatnice = new LinkedList<>();
+    List<Uplatnica> pronadjenaUplatnica = new LinkedList<>();
+    List<StudentskiCentar> studentskiCentri = new LinkedList<>();
+    List<StudentskiCentar> pronadjeniCentri = new LinkedList<>();
+    List<Student> studenti = new LinkedList<>();
+    List<Valuta> valute = new LinkedList<>();
+
+    HashMap<Integer, String[]> orinalneVrednosti = new HashMap<>();
+
     /**
      * Creates new form UplatnicaForm
      */
     public UplatnicaForm() {
         initComponents();
+        setLocationRelativeTo(null);
         ModelTabeleUplatnica mtu = new ModelTabeleUplatnica(Controller.getInstance().getAllUplatnica());
+        tblUplatnica.setModel(mtu);
+        ucitajPodatkeUComboBox();
+        setUpTableListener();
+        sacuvajOriginalneVrednosti(tblUplatnica);
+        setUpListenerNaCMB();
     }
 
     /**
@@ -31,7 +63,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblUplatnica = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtUplatnicaId = new javax.swing.JTextField();
@@ -66,7 +98,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblUplatnica.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -74,7 +106,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
                 "Uplatnica id", "Datum", "Iznos", "Naziv studentskog centra"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblUplatnica);
 
         jButton1.setText("izmeni");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -138,7 +170,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 762, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)))
@@ -164,7 +196,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(txtNazivCentra, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -254,7 +286,20 @@ public class UplatnicaForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            ModelTabeleUplatnica mtu = (ModelTabeleUplatnica) tblUplatnica.getModel();
+            Uplatnica u = mtu.getUplatnice().get(tblUplatnica.getSelectedRow());
+            
+            String setClause = generisiSetClause(tblUplatnica, tblUplatnica.getSelectedRow());
+            
+            Controller.getInstance().updateUplatnica(u, setClause);
+            
+            mtu.osvezi();
+        } catch (Exception ex) {
+            Logger.getLogger(UplatnicaForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtPozivNaBrojActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPozivNaBrojActionPerformed
@@ -262,7 +307,17 @@ public class UplatnicaForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPozivNaBrojActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            Uplatnica u = preuzmiPodatke();
+            
+            Controller.getInstance().insertUplatnica(u);
+            
+            ModelTabeleUplatnica mtu = (ModelTabeleUplatnica) tblUplatnica.getModel();
+            mtu.osvezi();
+        } catch (Exception ex) {
+            Logger.getLogger(UplatnicaForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -322,7 +377,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblUplatnica;
     private javax.swing.JTextField txtDatum;
     private javax.swing.JTextField txtIznos;
     private javax.swing.JTextField txtMesto;
@@ -335,4 +390,167 @@ public class UplatnicaForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtSvrhaUplate;
     private javax.swing.JTextField txtUplatnicaId;
     // End of variables declaration//GEN-END:variables
+
+    private void ucitajPodatkeUComboBox() {
+        ucitajStudentskiCentar();
+        ucitajStudente();
+        ucitajValute();
+    }
+
+    private void ucitajStudentskiCentar() {
+        studentskiCentri = Controller.getInstance().getAllStudentskiCentar();
+        if (cmbSCentar != null) {
+            cmbSCentar.removeAllItems();
+            for (StudentskiCentar sc : studentskiCentri) {
+                cmbSCentar.addItem(sc);
+            }
+        }
+        cmbSCentar.setSelectedItem(null);
+    }
+
+    private void ucitajStudente() {
+        studenti = Controller.getInstance().getAllStudent();
+        if (cmbStudent != null) {
+            cmbStudent.removeAllItems();
+            for (Student s : studenti) {
+                cmbStudent.addItem(s);
+            }
+        }
+        cmbStudent.setSelectedItem(null);
+
+    }
+
+    private void ucitajValute() {
+        valute = Controller.getInstance().getAllValuta();
+        if (cmbValuta != null) {
+            cmbValuta.removeAllItems();
+            for (Valuta v : valute) {
+                cmbValuta.addItem(v);
+            }
+        }
+        cmbValuta.setSelectedItem(null);
+    }
+
+    private void popuniFormuIzabranomUplatnicom(Uplatnica izbranaUplatnica) {
+        if (izbranaUplatnica != null) {
+            txtUplatnicaId.setText(String.valueOf(izbranaUplatnica.getUplatnicaId()));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            txtDatum.setText(dateFormat.format(izbranaUplatnica.getDatum()));
+
+            txtIznos.setText(String.valueOf(izbranaUplatnica.getIznos()));
+            txtPozivNaBroj.setText(String.valueOf(izbranaUplatnica.getPozivNaBroj()));
+            txtSifraPlacanja.setText(String.valueOf(izbranaUplatnica.getSifraPlacanja()));
+            txtModel.setText(String.valueOf(izbranaUplatnica.getModel1()));
+            cmbValuta.setSelectedItem(izbranaUplatnica.getValuta());
+
+            txtMesto.setText(izbranaUplatnica.getMesto());
+            txtRacunPlatioca.setText(izbranaUplatnica.getRacunPlatioca());
+            txtRacunPrimaoca.setText(izbranaUplatnica.getRacunPrimaoca());
+            txtSvrhaUplate.setText(izbranaUplatnica.getSvrhaUplate());
+
+            cmbSCentar.setSelectedItem(izbranaUplatnica.getSc());
+            cmbStudent.setSelectedItem(izbranaUplatnica.getStudent());
+
+        }
+
+    }
+
+    private void setUpTableListener() {
+        tblUplatnica.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    ModelTabeleUplatnica mtu = (ModelTabeleUplatnica) tblUplatnica.getModel();
+                    Uplatnica izbranaUplatnica = mtu.getUplatnice().get(tblUplatnica.getSelectedRow());
+                    popuniFormuIzabranomUplatnicom(izbranaUplatnica);
+                }
+            }
+
+        });
+    }
+
+    private void sacuvajOriginalneVrednosti(JTable tblUplatnica) {
+        ModelTabeleUplatnica mtu = (ModelTabeleUplatnica) tblUplatnica.getModel();
+
+        for (int i = 0; i < mtu.getRowCount(); i++) {
+            String scid = (String) mtu.getValueAt(i, 3);
+            String nazivsc = (String) mtu.getValueAt(i, 4);
+
+            orinalneVrednosti.put(i, new String[]{scid, nazivsc});
+        }
+
+    }
+
+    private void ucitajNazivSC(String scid) {
+        pronadjeniCentri = Controller.getInstance().findCentar("scid='"+scid+"'");
+        txtNazivCentra.setText(pronadjeniCentri.get(0).getNaziv());
+    }
+
+    private void setUpListenerNaCMB() {
+        cmbSCentar.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    try {
+                        ucitajNazivSC(cmbSCentar.getSelectedItem().toString());
+                    } catch (Exception ex) {
+                    }
+                }
+            }
+
+        });
+    }
+
+    private String generisiSetClause(JTable tblUplatnica, int selectedRow) {
+        ModelTabeleUplatnica mtu = (ModelTabeleUplatnica) this.tblUplatnica.getModel();
+        StringBuilder stringBuilder = new StringBuilder(" ");
+        
+        String scid = (String) mtu.getValueAt(selectedRow, 3);
+        String nazivSC = (String) mtu.getValueAt(selectedRow, 4);
+        
+        String[] original = orinalneVrednosti.get(selectedRow);
+        String orgSCID = original[0];
+        String orgNaziv = original[1];
+        
+        boolean needComma = false;
+        
+        if (!scid.equals(orgSCID)) {
+            stringBuilder.append("scid = '").append(scid).append("'");
+            needComma = true;
+        }
+        if (!nazivSC.equals(orgNaziv)) {
+            if (needComma) {
+                stringBuilder.append(", ");
+            }
+            stringBuilder.append("naziv = '").append(nazivSC).append("'");
+        }
+        return stringBuilder.toString();
+        
+    }
+
+    private Uplatnica preuzmiPodatke() {
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = null;
+        String datum = txtDatum.getText();
+        
+        if(!datum.isEmpty()){
+            try {
+                date = inputFormat.parse(datum);
+            } catch (ParseException ex) {
+                Logger.getLogger(UplatnicaForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        int isnos = Integer.parseInt(txtIznos.getText());
+        int pozivNaBroj = Integer.parseInt(txtPozivNaBroj.getText());
+        int sifra = Integer.parseInt(txtSifraPlacanja.getText());
+        int model = Integer.parseInt(txtModel.getText());
+        
+        Uplatnica u = new Uplatnica(Long.MIN_VALUE, date, isnos, pozivNaBroj, 
+                sifra, txtMesto.getText(), 
+                model, txtRacunPlatioca.getText(), txtRacunPrimaoca.getText(), 
+                txtSvrhaUplate.getText(), (StudentskiCentar) cmbSCentar.getSelectedItem(), 
+                (Student) cmbStudent.getSelectedItem(), (Valuta) cmbValuta.getSelectedItem(), "");
+        
+        return u;
+    }
 }

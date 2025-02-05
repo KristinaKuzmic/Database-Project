@@ -4,6 +4,12 @@
  */
 package forms;
 
+import controller.Controller;
+import domain.object.entities.StudentskiCentar;
+import forms.models.ModelTabeleStudentskiCentar;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 /**
  *
  * @author Kristina
@@ -15,6 +21,10 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
      */
     public StudentskiCentarForm() {
         initComponents();
+        setLocationRelativeTo(null);
+        ModelTabeleStudentskiCentar model = new ModelTabeleStudentskiCentar(Controller.getInstance().getAllStudentskiCentar());
+        tblSC.setModel(model);
+        setTableListener();
     }
 
     /**
@@ -28,7 +38,7 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblSC = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -40,7 +50,7 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
 
         jLabel1.setText("Studentski centar");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblSC.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -51,15 +61,25 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblSC);
 
         jLabel2.setText("SC id");
 
         jLabel3.setText("Naziv studentskog centra");
 
         btnSacuvaj.setText("sacuvaj");
+        btnSacuvaj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSacuvajActionPerformed(evt);
+            }
+        });
 
         btnIzmeni.setText("izmeni");
+        btnIzmeni.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIzmeniActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,6 +133,27 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSacuvajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacuvajActionPerformed
+        // TODO add your handling code here:
+        
+        StudentskiCentar sc = preuzmiPodatke();
+        
+        Controller.getInstance().insertStudentskiCentar(sc);
+        
+        ModelTabeleStudentskiCentar model = (ModelTabeleStudentskiCentar) tblSC.getModel();
+        model.osvezi();
+    }//GEN-LAST:event_btnSacuvajActionPerformed
+
+    private void btnIzmeniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmeniActionPerformed
+        // TODO add your handling code here:
+        StudentskiCentar sc = preuzmiPodatke();
+        
+        Controller.getInstance().updateStudentskiCentar(sc);
+        
+        ModelTabeleStudentskiCentar model = (ModelTabeleStudentskiCentar) tblSC.getModel();
+        model.osvezi();
+    }//GEN-LAST:event_btnIzmeniActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -155,8 +196,35 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblSC;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNaziv;
     // End of variables declaration//GEN-END:variables
+
+    private void popuniFormuIzabranimSC(StudentskiCentar sc) {
+        if (sc != null) {
+            txtId.setText(String.valueOf(sc.getScId()));
+            txtNaziv.setText(sc.getNaziv());
+        }
+    }
+
+    private void setTableListener() {
+        tblSC.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    ModelTabeleStudentskiCentar model = (ModelTabeleStudentskiCentar) tblSC.getModel();
+                    StudentskiCentar sc = model.getStudentskiCentri().get(tblSC.getSelectedRow());
+                    popuniFormuIzabranimSC(sc);
+                }
+            }
+        });
+    }
+
+    private StudentskiCentar preuzmiPodatke() {
+        Long scid = Long.parseLong(txtId.getText());
+        String naziv = txtNaziv.getText();
+        StudentskiCentar sc = new StudentskiCentar(scid, naziv);
+        return sc;
+    }
 }
