@@ -7,15 +7,18 @@ package domain.object.entities;
 import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Struct;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List; 
+import java.util.List;
 
 /**
  *
  * @author Kristina
  */
-public class Student extends DomainObject{
-    
+public class Student extends DomainObject {
+
     private String jmbg;
     private String ime;
     private String prezime;
@@ -29,6 +32,25 @@ public class Student extends DomainObject{
     private Ulica ulica;
     private Mesto mesto;
     private Grad grad;
+
+    public Student() {
+    }
+
+    public Student(String jmbg, String ime, String prezime, String imeJednogRoditelja, Date datumRodjenja, String brojIndeksa, String kontakt, String mejl, Fakultet fakultet, Broj broj, Ulica ulica, Mesto mesto, Grad grad) {
+        this.jmbg = jmbg;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.imeJednogRoditelja = imeJednogRoditelja;
+        this.datumRodjenja = datumRodjenja;
+        this.brojIndeksa = brojIndeksa;
+        this.kontakt = kontakt;
+        this.mejl = mejl;
+        this.fakultet = fakultet;
+        this.broj = broj;
+        this.ulica = ulica;
+        this.mesto = mesto;
+        this.grad = grad;
+    }
 
     public String getJmbg() {
         return jmbg;
@@ -133,17 +155,15 @@ public class Student extends DomainObject{
     public void setGrad(Grad grad) {
         this.grad = grad;
     }
-    
-    
 
     @Override
     public String getTableName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " student ";
     }
 
     @Override
     public String getAllColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " * ";
     }
 
     @Override
@@ -178,12 +198,65 @@ public class Student extends DomainObject{
 
     @Override
     public List<DomainObject> getObjectsFromResultSet(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<DomainObject> studenti = new ArrayList<>();
+        while (rs.next()) {
+            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yy");
+            String jmbg = rs.getString(1);
+            String ime = rs.getString(2);
+            String prezime = rs.getString(3);
+            String imeRoditelja = rs.getString(4);
+            Date dat = rs.getDate(5);
+            Struct struct = (Struct) rs.getObject(6);
+            String kontakt = "";
+            String mejl = "";
+            if (struct != null) {
+                Object[] attributes = struct.getAttributes();
+                kontakt = (String) attributes[0];
+                mejl = (String) attributes[1];
+            }
+            String brojIndeksa = rs.getString(7);
+
+            Fakultet fak = new Fakultet();
+            fak.setFakultetId(rs.getLong(8));
+
+            Broj broj = new Broj();
+            broj.setBrojId(rs.getLong(9));
+
+            Ulica ulica = new Ulica();
+            ulica.setUlicaId(rs.getLong(10));
+
+            Mesto mesto = new Mesto();
+            mesto.setMestoid(rs.getLong(11));
+
+            Grad grad = new Grad();
+            grad.setPostanskiBroj(rs.getLong(12));
+
+            Student s = new Student(jmbg, ime, prezime, imeRoditelja, dat,
+                    brojIndeksa, kontakt, mejl, fak, broj, ulica, mesto, grad);
+
+            studenti.add(s);
+        }
+        return studenti;
     }
 
     @Override
     public String getOrderByColumn() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " jmbg ";
     }
-    
+
+    @Override
+    public String alijas() {
+        return " s ";
+    }
+
+    @Override
+    public String getJoin() {
+        return "";
+    }
+
+    @Override
+    public String toString() {
+        return ime + " " + prezime;
+    }
+
 }

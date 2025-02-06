@@ -7,6 +7,8 @@ package domain.object.entities;
 import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -169,22 +171,36 @@ public class Uplatnica extends DomainObject{
 
     @Override
     public String getTableName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " uplatnica ";
     }
 
     @Override
     public String getAllColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " * ";
     }
 
     @Override
     public String getAllInsertColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
+
+        String datumString = datum != null ? "TO_DATE('" + sdf.format(datum) + "', 'DD-MM-YY')" : "NULL";
+        
+        return String.format("%d, '%s', %s, %d, %d, %d, '%s', '%s', %d, %d, '%s', '%s', %d", this.uplatnicaId, this.Mesto, datumString, this.iznos,
+                this.model, this.pozivNaBroj, this.racunPlatioca, this.racunPrimaoca, this.sc.getScId(),
+                this.sifraPlacanja,this.student.getJmbg(), this.svrhaUplate, this.valuta.getValutaId());
     }
 
     @Override
     public String getColumnValues() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
+        String datumString = datum != null ? "TO_DATE('" + sdf.format(datum) + "', 'DD-MM-YY')" : "NULL";
+        return String.format("uplatnicaid = %d, mesto = '%s', datum = %s, iznos = %d, model = %d,"
+                + "pozivNaBroj= %d, racunPlatioca = '%s', racunPrimaoca = '%s', scid = %d, sifraplacanja = %d, jmbg '%s', "
+                + " svrhauplate = '%s', valutaid = %d", 
+                this.uplatnicaId, this.Mesto, datumString, this.iznos,
+                this.model, this.pozivNaBroj, this.racunPlatioca, this.racunPrimaoca, this.sc.getScId(),
+                this.sifraPlacanja,this.student.getJmbg(), this.svrhaUplate, this.valuta.getValutaId());
+        
     }
 
     @Override
@@ -209,22 +225,54 @@ public class Uplatnica extends DomainObject{
 
     @Override
     public List<DomainObject> getObjectsFromResultSet(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<DomainObject> uplatnice = new ArrayList<>();
+        while(rs.next()){
+            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yy");
+            Long id = rs.getLong(1);
+            Date datum = rs.getDate(2);
+            int iznos = rs.getInt(3);
+            int pozivNaBroj = rs.getInt(4);
+            int sifraPlacanja = rs.getInt(5);
+            String mesto = rs.getString(6);
+            int mod = rs.getInt(7);
+            String racunPlatioca = rs.getString(8);
+            String racunPrimaoca = rs.getString(9);
+            String svrhaUplate = rs.getString(10);
+            
+            StudentskiCentar sc = new StudentskiCentar();
+            sc.setScId(rs.getLong(11));
+            
+            Student student = new Student();
+            student.setJmbg(rs.getString(12));
+            
+            Valuta v = new Valuta();
+            v.setValutaId(rs.getLong(13));
+            
+            String nazivSC = rs.getString(14);
+            
+            Uplatnica u = new Uplatnica(id, datum, iznos, pozivNaBroj, sifraPlacanja, 
+                    mesto, mod, racunPlatioca, racunPrimaoca, svrhaUplate, sc, student, v, nazivSC);
+            uplatnice.add(u);
+            
+        }
+        
+        return uplatnice;
     }
 
     @Override
     public String getOrderByColumn() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "uplatnicaid";
     }
 
     @Override
     public String alijas() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " u ";
     }
 
     @Override
     public String getJoin() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "";
+        //return " join studentskicentar sc on (u.scid = sc.scid) join student s on (u.jmbg = s.jmbg) join valuta v on (u.valutaid = v.valutaid)";
     }
     
 }

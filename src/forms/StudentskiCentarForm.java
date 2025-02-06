@@ -7,6 +7,8 @@ package forms;
 import controller.Controller;
 import domain.object.entities.StudentskiCentar;
 import forms.models.ModelTabeleStudentskiCentar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -19,7 +21,7 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
     /**
      * Creates new form StudentskiCentarForm
      */
-    public StudentskiCentarForm() {
+    public StudentskiCentarForm() throws Exception {
         initComponents();
         setLocationRelativeTo(null);
         ModelTabeleStudentskiCentar model = new ModelTabeleStudentskiCentar(Controller.getInstance().getAllStudentskiCentar());
@@ -134,24 +136,32 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSacuvajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacuvajActionPerformed
-        // TODO add your handling code here:
-        
-        StudentskiCentar sc = preuzmiPodatke();
-        
-        Controller.getInstance().insertStudentskiCentar(sc);
-        
-        ModelTabeleStudentskiCentar model = (ModelTabeleStudentskiCentar) tblSC.getModel();
-        model.osvezi();
+        try {
+            // TODO add your handling code here:
+
+            StudentskiCentar sc = preuzmiPodatke();
+
+            Controller.getInstance().insertStudentskiCentar(sc);
+
+            ModelTabeleStudentskiCentar model = (ModelTabeleStudentskiCentar) tblSC.getModel();
+            model.osvezi();
+        } catch (Exception ex) {
+            Logger.getLogger(StudentskiCentarForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnSacuvajActionPerformed
 
     private void btnIzmeniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmeniActionPerformed
-        // TODO add your handling code here:
-        StudentskiCentar sc = preuzmiPodatke();
-        
-        Controller.getInstance().updateStudentskiCentar(sc);
-        
-        ModelTabeleStudentskiCentar model = (ModelTabeleStudentskiCentar) tblSC.getModel();
-        model.osvezi();
+        try {
+            // TODO add your handling code here:
+            StudentskiCentar sc = preuzmiPodatke();
+
+            Controller.getInstance().updateStudentskiCentar(sc);
+
+            ModelTabeleStudentskiCentar model = (ModelTabeleStudentskiCentar) tblSC.getModel();
+            model.osvezi();
+        } catch (Exception ex) {
+            Logger.getLogger(StudentskiCentarForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnIzmeniActionPerformed
 
     /**
@@ -184,7 +194,11 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StudentskiCentarForm().setVisible(true);
+                try {
+                    new StudentskiCentarForm().setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(StudentskiCentarForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -214,8 +228,11 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
                     ModelTabeleStudentskiCentar model = (ModelTabeleStudentskiCentar) tblSC.getModel();
-                    StudentskiCentar sc = model.getStudentskiCentri().get(tblSC.getSelectedRow());
-                    popuniFormuIzabranimSC(sc);
+                    if (tblSC.getSelectedRow() >= 0) {
+                        StudentskiCentar sc = model.getStudentskiCentri().get(tblSC.getSelectedRow());
+                        popuniFormuIzabranimSC(sc);
+                    }
+
                 }
             }
         });

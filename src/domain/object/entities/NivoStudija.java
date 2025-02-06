@@ -7,6 +7,7 @@ package domain.object.entities;
 import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,17 +63,22 @@ public class NivoStudija extends DomainObject{
     public void setEspb(int espb) {
         this.espb = espb;
     }
+
+    @Override
+    public String toString() {
+        return this.getNaziv();
+    }
     
     
 
     @Override
     public String getTableName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " nivostudija ";
     }
 
     @Override
     public String getAllColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " * ";
     }
 
     @Override
@@ -107,22 +113,31 @@ public class NivoStudija extends DomainObject{
 
     @Override
     public List<DomainObject> getObjectsFromResultSet(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<DomainObject> nivoiStudija = new ArrayList<>();
+        while(rs.next()){
+            Long nivoId = rs.getLong(1);
+            String naziv = rs.getString(2);
+            String trajanje = rs.getString(3);
+            int espb = rs.getInt(4);
+            NivoStudija ns = new NivoStudija(nivoId, naziv, trajanje, espb);
+            nivoiStudija.add(ns);
+        }
+        return nivoiStudija;
     }
 
     @Override
     public String getOrderByColumn() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " nivoid ";
     }
 
     @Override
     public String alijas() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " ns ";
     }
 
     @Override
     public String getJoin() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "";
     }
     
 }

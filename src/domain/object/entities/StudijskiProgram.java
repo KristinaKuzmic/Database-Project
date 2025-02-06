@@ -85,12 +85,17 @@ public class StudijskiProgram extends DomainObject {
 
     @Override
     public String getAllInsertColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "fakultetid, programid, naziv, nivoid, naziv_fakulteta";
     }
 
     @Override
     public String getColumnValues() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return String.format("%d, %d, '%s', %d, '%s'",
+                this.fakultet.getFakultetId(),
+                this.programId,
+                this.naziv,
+                this.nivoStudija.getNivoId(),
+                this.nazivFakulteta);
     }
 
     @Override
@@ -105,7 +110,7 @@ public class StudijskiProgram extends DomainObject {
 
     @Override
     public String getUpdateWhereClause() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return String.format("fakultetid=%d AND programid=%d", this.getFakultet().getFakultetId(), this.getProgramId());
     }
 
     @Override
@@ -116,7 +121,7 @@ public class StudijskiProgram extends DomainObject {
     @Override
     public List<DomainObject> getObjectsFromResultSet(ResultSet rs) throws SQLException {
         List<DomainObject> programi = new ArrayList<>();
-        while(rs.next()){
+        while (rs.next()) {
             Long programId = rs.getLong(1);
             Long fakultetId = rs.getLong(2);
             String nazivp = rs.getString(3);

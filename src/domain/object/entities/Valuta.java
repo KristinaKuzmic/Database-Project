@@ -7,6 +7,8 @@ package domain.object.entities;
 import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,6 +19,14 @@ public class Valuta extends DomainObject{
     
     private Long valutaId;
     private String naziv;
+
+    public Valuta() {
+    }
+
+    public Valuta(Long valutaId, String naziv) {
+        this.valutaId = valutaId;
+        this.naziv = naziv;
+    }
 
     public Long getValutaId() {
         return valutaId;
@@ -38,12 +48,12 @@ public class Valuta extends DomainObject{
 
     @Override
     public String getTableName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " valuta ";
     }
 
     @Override
     public String getAllColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " * ";
     }
 
     @Override
@@ -78,12 +88,31 @@ public class Valuta extends DomainObject{
 
     @Override
     public List<DomainObject> getObjectsFromResultSet(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<DomainObject> valute = new ArrayList<>();
+        while (rs.next()) {            
+            Long valutaid = rs.getLong(1);
+            String naziv = rs.getString(2);
+            Date datum = rs.getDate(3);
+            
+            Valuta v= new Valuta(valutaid, naziv);
+            valute.add(v);
+        }
+        return valute;
     }
 
     @Override
     public String getOrderByColumn() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " valutaid ";
+    }
+
+    @Override
+    public String alijas() {
+        return " v "; 
+    }
+
+    @Override
+    public String getJoin() {
+        return "";
     }
     
 }

@@ -64,7 +64,7 @@ public class ModelTabeleStudentskiCentar extends AbstractTableModel {
     }
 
     
-    public void osvezi() {
+    public void osvezi() throws Exception {
         studentskiCentri = Controller.getInstance().getAllStudentskiCentar();
         fireTableDataChanged();
            

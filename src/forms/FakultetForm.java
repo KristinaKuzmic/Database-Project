@@ -39,7 +39,8 @@ public class FakultetForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         loadDataIntoForm();
         setUpTableListenerTblFakultet();
-        setUpTableLiistenerTblStudijskiProgram();
+        popuniFormuComboBox();
+        //setUpTableLiistenerTblStudijskiProgram();
 
     }
 
@@ -167,7 +168,7 @@ public class FakultetForm extends javax.swing.JFrame {
                                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(txtNazivFakulteta, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)))))
-                        .addContainerGap(382, Short.MAX_VALUE))
+                        .addContainerGap(365, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -175,7 +176,7 @@ public class FakultetForm extends javax.swing.JFrame {
                                 .addComponent(btnIzmeniFakultet))
                             .addComponent(jScrollPane2)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(btnIzmeniProgram)
@@ -264,21 +265,25 @@ public class FakultetForm extends javax.swing.JFrame {
             
             StudijskiProgram studijskiProgram = izabraniProgram();
             
-            popuniTabeluProgramima(studijskiProgram.getFakultet().getFakultetId());
+            popuniTabeluProgramima(izabraniFakultet().getFakultetId());
         } catch (Exception ex) {
             Logger.getLogger(FakultetForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnSacuvajActionPerformed
 
     private void btnIzmeniProgramActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmeniProgramActionPerformed
-        // TODO add your handling code here:
-        
-        StudijskiProgram sp = izabraniProgram();
-        String setClause = generisiSetClause(tblProgram,tblProgram.getSelectedRow());
-        
-        Controller.getInstance().updateProgram(sp, setClause);
-        
-        ucitajPrograme();
+        try {
+            // TODO add your handling code here:
+            
+            StudijskiProgram sp = izabraniProgram();
+            String setClause = generisiSetClause(tblProgram,tblProgram.getSelectedRow());
+            
+            Controller.getInstance().updateProgram(sp, setClause);
+            
+            ucitajPrograme();
+        } catch (Exception ex) {
+            Logger.getLogger(FakultetForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnIzmeniProgramActionPerformed
 
 
@@ -403,6 +408,9 @@ public class FakultetForm extends javax.swing.JFrame {
         }
 
         StudijskiProgram sp = new StudijskiProgram();
+        Fakultet fak = new Fakultet();
+        fak.setFakultetId(fakultetid);
+        sp.setFakultet(fak);
         sp.setProgramId(programid);
         sp.setNaziv(nazivP);
         sp.setNazivFakulteta(nazivFak);
@@ -478,6 +486,7 @@ public class FakultetForm extends javax.swing.JFrame {
         
         StudijskiProgram sp = new StudijskiProgram();
         sp.setProgramId(programId);
+        sp.setNivoStudija((NivoStudija) cmbNivo.getSelectedItem());
         sp.setNaziv(nazivP);
         sp.setFakultet(izabraniFakultet());
         return sp;
@@ -518,7 +527,7 @@ public class FakultetForm extends javax.swing.JFrame {
         return stringBuilder.toString();
     }
 
-    private void ucitajPrograme() {
+    private void ucitajPrograme() throws Exception {
         DefaultTableModel dfm = (DefaultTableModel) tblProgram.getModel();
         
         studijskiProgrami = Controller.getInstance().getAllProgrami();
@@ -526,5 +535,15 @@ public class FakultetForm extends javax.swing.JFrame {
         for (StudijskiProgram sp : studijskiProgrami) {
             dfm.addRow(new Object[]{sp.getProgramId(), sp.getFakultet().getFakultetId(), sp.getNaziv(), sp.getNivoStudija().getNaziv(), sp.getNazivFakulteta()});
         }
+    }
+
+    private void popuniFormuComboBox() throws Exception {
+        List<NivoStudija> nivoiStudija = Controller.getInstance().getAllNivoStudija();
+        
+        cmbNivo.removeAllItems();
+        for (NivoStudija ns : nivoiStudija) {
+            cmbNivo.addItem(ns);
+        }
+        cmbNivo.setSelectedIndex(-1);
     }
 }

@@ -42,7 +42,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
     /**
      * Creates new form UplatnicaForm
      */
-    public UplatnicaForm() {
+    public UplatnicaForm() throws Exception {
         initComponents();
         setLocationRelativeTo(null);
         ModelTabeleUplatnica mtu = new ModelTabeleUplatnica(Controller.getInstance().getAllUplatnica());
@@ -103,7 +103,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Uplatnica id", "Datum", "Iznos", "Naziv studentskog centra"
+                "Uplatnica id", "Datum", "Iznos", "Naziv studentskog centra", "Title 5"
             }
         ));
         jScrollPane1.setViewportView(tblUplatnica);
@@ -350,7 +350,11 @@ public class UplatnicaForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UplatnicaForm().setVisible(true);
+                try {
+                    new UplatnicaForm().setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(UplatnicaForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -391,13 +395,13 @@ public class UplatnicaForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtUplatnicaId;
     // End of variables declaration//GEN-END:variables
 
-    private void ucitajPodatkeUComboBox() {
+    private void ucitajPodatkeUComboBox() throws Exception {
         ucitajStudentskiCentar();
         ucitajStudente();
         ucitajValute();
     }
 
-    private void ucitajStudentskiCentar() {
+    private void ucitajStudentskiCentar() throws Exception {
         studentskiCentri = Controller.getInstance().getAllStudentskiCentar();
         if (cmbSCentar != null) {
             cmbSCentar.removeAllItems();
@@ -408,7 +412,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
         cmbSCentar.setSelectedItem(null);
     }
 
-    private void ucitajStudente() {
+    private void ucitajStudente() throws Exception {
         studenti = Controller.getInstance().getAllStudent();
         if (cmbStudent != null) {
             cmbStudent.removeAllItems();
@@ -420,7 +424,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
 
     }
 
-    private void ucitajValute() {
+    private void ucitajValute() throws Exception {
         valute = Controller.getInstance().getAllValuta();
         if (cmbValuta != null) {
             cmbValuta.removeAllItems();
@@ -473,15 +477,15 @@ public class UplatnicaForm extends javax.swing.JFrame {
         ModelTabeleUplatnica mtu = (ModelTabeleUplatnica) tblUplatnica.getModel();
 
         for (int i = 0; i < mtu.getRowCount(); i++) {
-            String scid = (String) mtu.getValueAt(i, 3);
+            Long scid = (Long) mtu.getValueAt(i, 3);
             String nazivsc = (String) mtu.getValueAt(i, 4);
 
-            orinalneVrednosti.put(i, new String[]{scid, nazivsc});
+            orinalneVrednosti.put(i, new String[]{String.valueOf(scid), nazivsc});
         }
 
     }
 
-    private void ucitajNazivSC(String scid) {
+    private void ucitajNazivSC(String scid) throws Exception {
         pronadjeniCentri = Controller.getInstance().findCentar("scid='"+scid+"'");
         txtNazivCentra.setText(pronadjeniCentri.get(0).getNaziv());
     }

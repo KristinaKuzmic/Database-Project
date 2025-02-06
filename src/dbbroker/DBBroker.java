@@ -92,7 +92,7 @@ public class DBBroker {
         try {
             Statement statement = connection.createStatement();
             String query = "insert into " + object.getTableName() + "(" + object.getAllInsertColumnNames() + ")" + 
-                    " values " + object.getColumnValues() + ")";
+                    " values ( " + object.getColumnValues() + ")";
             System.out.println(query);
             return statement.executeUpdate(query);
         } catch (SQLException ex) {
