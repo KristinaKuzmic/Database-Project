@@ -75,17 +75,17 @@ public class DBBroker {
         }
     }
     
-    /* public List<DomainObject> getPartition(DomainObject object, String part) throws SQLException {
+     public List<DomainObject> getPartition(DomainObject object, String part) throws SQLException {
         try {
             Statement statement = connection.createStatement();
-            String query = "SELECT * FROM DOZNAKA " + part;
+            String query = "SELECT * FROM uverenjeODiplomiranju  " + part;
             ResultSet rs = statement.executeQuery(query);
-
+            System.out.println(query);
             return object.getObjectsFromResultSet(rs);
         } catch (SQLException ex) {
             throw ex;
         }
-    }*/
+    }
     
     
     public int insert(DomainObject object) throws SQLException{

@@ -11,7 +11,9 @@ import domain.object.entities.Student;
 import domain.object.entities.StudentskiCentar;
 import domain.object.entities.StudijskiProgram;
 import domain.object.entities.Uplatnica;
+import domain.object.entities.UverenjeODiplomiranju;
 import domain.object.entities.Valuta;
+import domain.object.entities.Zaposleni;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -156,6 +158,34 @@ public class Controller {
         List<NivoStudija> ns = (List<NivoStudija>) (Object) dbBroker.getAll(new NivoStudija());
         dbBroker.disconnect();
         return ns;
+    }
+
+    public List<UverenjeODiplomiranju> getAllDiplomiranja() throws Exception {
+        dbBroker.connect();
+        List<UverenjeODiplomiranju> uverenja = (List<UverenjeODiplomiranju>) (Object) dbBroker.getAll(new UverenjeODiplomiranju());
+        dbBroker.disconnect();;
+        return uverenja;
+    }
+
+    public List<UverenjeODiplomiranju> getAllParticion(String uslov) throws Exception {
+        dbBroker.connect();
+        List<UverenjeODiplomiranju> uverenja = (List<UverenjeODiplomiranju>) (Object) dbBroker.getPartition(new UverenjeODiplomiranju(), uslov);
+        dbBroker.disconnect();
+        return uverenja;
+    }
+
+    public List<Zaposleni> getAllZaposleni() throws  Exception {
+        dbBroker.connect();
+        List<Zaposleni> zaposleni = (List<Zaposleni>) (Object) dbBroker.getAll(new Zaposleni());
+        dbBroker.disconnect();
+        return zaposleni;
+    }
+
+    public List<Zaposleni> findZaposleni(String string) throws Exception {
+        dbBroker.connect();
+        List<Zaposleni> z = (List<Zaposleni>) (Object) dbBroker.getAllWithWhere(new Zaposleni(), string);
+        dbBroker.disconnect();
+        return z;
     }
 
 }

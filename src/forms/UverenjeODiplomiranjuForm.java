@@ -4,17 +4,45 @@
  */
 package forms;
 
+import controller.Controller;
+import domain.object.entities.Fakultet;
+import domain.object.entities.Student;
+import domain.object.entities.StudijskiProgram;
+import domain.object.entities.UverenjeODiplomiranju;
+import domain.object.entities.Zaposleni;
+import forms.models.ModelTabeleDiplomiranje;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.SimpleDateFormat;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.text.StyleConstants;
+
 /**
  *
  * @author Kristina
  */
 public class UverenjeODiplomiranjuForm extends javax.swing.JFrame {
 
+    private List<StudijskiProgram> programi = new LinkedList<>();
+    private List<Zaposleni> zaposleni = new LinkedList<>();
+
     /**
      * Creates new form UverenjeODiplomiranjuForm
      */
-    public UverenjeODiplomiranjuForm() {
+    public UverenjeODiplomiranjuForm() throws Exception {
         initComponents();
+        setLocationRelativeTo(null);
+        popuniRBtn();
+        ModelTabeleDiplomiranje model = new ModelTabeleDiplomiranje(Controller.getInstance().getAllDiplomiranja());
+        tblDiplomiranje.setModel(model);
+        setRadioButtonListener();
+        popuniComboBox();
+        setTableListener();
     }
 
     /**
@@ -26,21 +54,260 @@ public class UverenjeODiplomiranjuForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
+        buttonGroup3 = new javax.swing.ButtonGroup();
+        buttonGroup4 = new javax.swing.ButtonGroup();
+        buttonGroup5 = new javax.swing.ButtonGroup();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDiplomiranje = new javax.swing.JTable();
+        rbtnSVa = new javax.swing.JRadioButton();
+        rbtn21 = new javax.swing.JRadioButton();
+        rbtn22 = new javax.swing.JRadioButton();
+        rbtn23 = new javax.swing.JRadioButton();
+        rbtn24 = new javax.swing.JRadioButton();
+        jLabel1 = new javax.swing.JLabel();
+        txtRedniBroj = new javax.swing.JTextField();
+        txtDatumIzdavanja = new javax.swing.JTextField();
+        txtGodinaUpisa = new javax.swing.JTextField();
+        txtProsecnaOcena = new javax.swing.JTextField();
+        txtNaplata = new javax.swing.JTextField();
+        txtDatumZavrsetka = new javax.swing.JTextField();
+        txtZvanje = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        btnSacuvaj = new javax.swing.JButton();
+        cmbStudent = new javax.swing.JComboBox();
+        cmbZaposleni = new javax.swing.JComboBox();
+        cmbFakultet = new javax.swing.JComboBox();
+        cmbProgram = new javax.swing.JComboBox();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        tblDiplomiranje.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblDiplomiranje);
+
+        rbtnSVa.setText("Sva uverenja");
+
+        rbtn21.setText("skolska 2021/2022");
+
+        rbtn22.setText("skolska 2022/2023");
+
+        rbtn23.setText("skolska 2023/2024");
+
+        rbtn24.setText("skolska 2024/2025");
+
+        jLabel1.setText("Uverenje o diplomiranju");
+
+        jLabel2.setText("Redni broj");
+
+        jLabel4.setText("Datum izdavanja");
+
+        jLabel5.setText("Godina upisa");
+
+        jLabel6.setText("Prosecna ocena");
+
+        jLabel7.setText("Naplata");
+
+        jLabel8.setText("Datum zavrsetka");
+
+        jLabel3.setText("Zaposleni overio");
+
+        jLabel9.setText("Fakultet");
+
+        jLabel10.setText("Studijski program");
+
+        jLabel11.setText("Zvanje");
+
+        jLabel14.setText("Student");
+
+        btnSacuvaj.setText("sacuvaj");
+        btnSacuvaj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSacuvajActionPerformed(evt);
+            }
+        });
+
+        cmbStudent.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbStudentActionPerformed(evt);
+            }
+        });
+
+        cmbZaposleni.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cmbFakultet.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cmbProgram.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 692, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rbtnSVa, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(rbtn24, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(rbtn21, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(rbtn22, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(rbtn23, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtRedniBroj, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNaplata, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtProsecnaOcena, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtGodinaUpisa, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDatumIzdavanja, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtDatumZavrsetka, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnSacuvaj)))
+                        .addGap(35, 35, 35))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbZaposleni, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbFakultet, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbStudent, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbProgram, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtZvanje, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(rbtnSVa)
+                        .addGap(18, 18, 18)
+                        .addComponent(rbtn21)
+                        .addGap(18, 18, 18)
+                        .addComponent(rbtn22)
+                        .addGap(18, 18, 18)
+                        .addComponent(rbtn23)
+                        .addGap(18, 18, 18)
+                        .addComponent(rbtn24))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(cmbZaposleni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(cmbFakultet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(58, 58, 58)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtZvanje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSacuvaj)
+                        .addGap(66, 66, 66))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtRedniBroj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addComponent(cmbStudent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel14))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtDatumIzdavanja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtGodinaUpisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtProsecnaOcena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel10)
+                            .addComponent(cmbProgram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtNaplata, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtDatumZavrsetka, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8))
+                        .addGap(67, 67, 67))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cmbStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStudentActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbStudentActionPerformed
+
+    private void btnSacuvajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacuvajActionPerformed
+        try {
+            // TODO add your handling code here:
+            UverenjeODiplomiranju ud = preuzmiPodatkeSaForme();
+            Controller.getInstance().insertUverenjeODiplomiranju(ud);
+            ModelTabeleDiplomiranje model = (ModelTabeleDiplomiranje) tblDiplomiranje.getModel();
+            model.osvezi();
+        } catch (Exception ex) {
+            Logger.getLogger(UverenjeODiplomiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnSacuvajActionPerformed
 
     /**
      * @param args the command line arguments
@@ -72,11 +339,252 @@ public class UverenjeODiplomiranjuForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new UverenjeODiplomiranjuForm().setVisible(true);
+                try {
+                    new UverenjeODiplomiranjuForm().setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(UverenjeODiplomiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSacuvaj;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.ButtonGroup buttonGroup3;
+    private javax.swing.ButtonGroup buttonGroup4;
+    private javax.swing.ButtonGroup buttonGroup5;
+    private javax.swing.JComboBox cmbFakultet;
+    private javax.swing.JComboBox cmbProgram;
+    private javax.swing.JComboBox cmbStudent;
+    private javax.swing.JComboBox cmbZaposleni;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JRadioButton rbtn21;
+    private javax.swing.JRadioButton rbtn22;
+    private javax.swing.JRadioButton rbtn23;
+    private javax.swing.JRadioButton rbtn24;
+    private javax.swing.JRadioButton rbtnSVa;
+    private javax.swing.JTable tblDiplomiranje;
+    private javax.swing.JTextField txtDatumIzdavanja;
+    private javax.swing.JTextField txtDatumZavrsetka;
+    private javax.swing.JTextField txtGodinaUpisa;
+    private javax.swing.JTextField txtNaplata;
+    private javax.swing.JTextField txtProsecnaOcena;
+    private javax.swing.JTextField txtRedniBroj;
+    private javax.swing.JTextField txtZvanje;
     // End of variables declaration//GEN-END:variables
+
+    private void popuniRBtn() {
+        buttonGroup1.add(rbtn21);
+        buttonGroup1.add(rbtn22);
+        buttonGroup1.add(rbtn23);
+        buttonGroup1.add(rbtn24);
+        buttonGroup1.add(rbtnSVa);
+    }
+
+    private void popuniFormuIzabranimDiplomiranjem(UverenjeODiplomiranju ud) throws Exception {
+        if (ud != null) {
+            txtRedniBroj.setText(String.valueOf(ud.getRedniBroj()));
+            txtGodinaUpisa.setText(String.valueOf(ud.getGodinaUpisa()));
+            txtProsecnaOcena.setText(String.valueOf(ud.getGodinaUpisa()));
+            txtNaplata.setText(String.valueOf(ud.getNaplata()));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            if (ud.getDatum() != null) {
+                txtDatumIzdavanja.setText(dateFormat.format(ud.getDatum()));
+            }
+            if (ud.getDatumZavrsetka() != null) {
+                txtDatumZavrsetka.setText(dateFormat.format(ud.getDatumZavrsetka()));
+            }
+            txtZvanje.setText(ud.getZvanje());
+            List<Student> studenti = Controller.getInstance().getAllStudent();
+            for (Student s : studenti) {
+                if (s.equals(ud.getStudent())) {
+                    cmbStudent.setSelectedItem(s);
+                }
+            }
+            List<Zaposleni> zaposleni = Controller.getInstance().getAllZaposleni();
+            for (Zaposleni z : zaposleni) {
+                if (z.equals(ud.getZaposleni())) {
+                    cmbZaposleni.setSelectedItem(z);
+                }
+            }
+            List<Fakultet> fakulteti = Controller.getInstance().getAllFakulteti();
+            for (Fakultet f : fakulteti) {
+                if (f.equals(ud.getFakultet())) {
+                    cmbFakultet.setSelectedItem(f);
+                }
+            }
+            List<StudijskiProgram> programi = Controller.getInstance().getAllProgrami();
+            for (StudijskiProgram sp : programi) {
+                if (sp.equals(ud.getProgram())) {
+                    cmbProgram.setSelectedItem(sp);
+                }
+            }
+
+        }
+    }
+
+    private void setTableListener() {
+        tblDiplomiranje.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    try {
+                        ModelTabeleDiplomiranje model = (ModelTabeleDiplomiranje) tblDiplomiranje.getModel();
+                        UverenjeODiplomiranju ud = model.getDiplomiranja().get(tblDiplomiranje.getSelectedRow());
+                        popuniFormuIzabranimDiplomiranjem(ud);
+                    } catch (Exception ex) {
+                        Logger.getLogger(UverenjeODiplomiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+        });
+    }
+
+    private void setRadioButtonListener() {
+        rbtn21.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    try {
+                        ModelTabeleDiplomiranje model = (ModelTabeleDiplomiranje) tblDiplomiranje.getModel();
+                        model.osvezi("PARTITION (HP1)");
+                    } catch (Exception ex) {
+                        Logger.getLogger(UverenjeODiplomiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        rbtn22.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    try {
+                        ModelTabeleDiplomiranje model = (ModelTabeleDiplomiranje) tblDiplomiranje.getModel();
+                        model.osvezi("PARTITION (HP2)");
+                    } catch (Exception ex) {
+                        Logger.getLogger(UverenjeODiplomiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        rbtn23.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    try {
+                        ModelTabeleDiplomiranje model = (ModelTabeleDiplomiranje) tblDiplomiranje.getModel();
+                        model.osvezi("PARTITION (HP3)");
+                    } catch (Exception ex) {
+                        Logger.getLogger(UverenjeODiplomiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        rbtn24.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    try {
+                        ModelTabeleDiplomiranje model = (ModelTabeleDiplomiranje) tblDiplomiranje.getModel();
+                        model.osvezi("PARTITION (HP4)");
+                    } catch (Exception ex) {
+                        Logger.getLogger(UverenjeODiplomiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        rbtnSVa.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    try {
+                        ModelTabeleDiplomiranje model = (ModelTabeleDiplomiranje) tblDiplomiranje.getModel();
+                        model.osvezi();
+                    } catch (Exception ex) {
+                        Logger.getLogger(UverenjeODiplomiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+    }
+
+    private void popuniComboBox() throws Exception {
+        popuniStudenta();
+        //popuniZaposlene();
+        popuniFakultet();
+        popuniProgrameNaOsnovuIzabranogFakulteta();
+    }
+
+    private void popuniStudenta() throws Exception {
+        List<Student> studenti = Controller.getInstance().getAllStudent();
+        cmbStudent.removeAllItems();
+        for (Student s : studenti) {
+            cmbStudent.addItem(s);
+        }
+        cmbStudent.setSelectedItem(null);
+    }
+
+
+    private void popuniFakultet() throws Exception {
+        List<Fakultet> fakulteti = Controller.getInstance().getAllFakulteti();
+        cmbFakultet.removeAllItems();
+        for (Fakultet f : fakulteti) {
+            cmbFakultet.addItem(f);
+        }
+        cmbFakultet.setSelectedItem(null);
+    }
+
+    private void popuniProgrameNaOsnovuIzabranogFakulteta() {
+        cmbFakultet.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    try {
+                        programi = pronadjiPrograme(cmbFakultet.getSelectedItem());
+                        zaposleni = pronadjiZaposlene(cmbFakultet.getSelectedItem());
+                        cmbProgram.removeAllItems();
+                        cmbZaposleni.removeAllItems();
+                        for (Zaposleni z : zaposleni) {
+                            cmbZaposleni.addItem(z);
+                        }
+                        for (StudijskiProgram sp : programi) {
+                            cmbProgram.addItem(sp);
+                        }
+                    } catch (Exception ex) {
+                    }
+                }
+            }
+
+        });
+    }
+
+    private List<Zaposleni> pronadjiZaposlene(Object selectedItem) throws Exception {
+        Fakultet fak = (Fakultet) selectedItem;
+        return Controller.getInstance().findZaposleni("fakultetid = "+fak.getFakultetId());
+    }
+
+    private List<StudijskiProgram> pronadjiPrograme(Object selectedItem) throws Exception {
+        Fakultet fak = (Fakultet) selectedItem;
+        return Controller.getInstance().findProgrami("fakultetid = " + fak.getFakultetId());
+    }
+
+    private UverenjeODiplomiranju preuzmiPodatkeSaForme() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

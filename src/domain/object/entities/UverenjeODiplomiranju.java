@@ -7,6 +7,7 @@ package domain.object.entities;
 import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,8 +15,8 @@ import java.util.List;
  *
  * @author Kristina
  */
-public class UverenjeODiplomiranju extends DomainObject{
-    
+public class UverenjeODiplomiranju extends DomainObject {
+
     private Long redniBroj;
     private Date datum;
     private int godinaUpisa;
@@ -26,7 +27,24 @@ public class UverenjeODiplomiranju extends DomainObject{
     private Zaposleni zaposleni;
     private StudijskiProgram program;
     private Fakultet fakultet;
-    private Zvanje zvanje;
+    private String zvanje;
+
+    public UverenjeODiplomiranju() {
+    }
+
+    public UverenjeODiplomiranju(Long redniBroj, Date datum, int godinaUpisa, double prosecnaOcena, int naplata, Date datumZavrsetka, Student student, Zaposleni zaposleni, StudijskiProgram program, Fakultet fakultet, String zvanje) {
+        this.redniBroj = redniBroj;
+        this.datum = datum;
+        this.godinaUpisa = godinaUpisa;
+        this.prosecnaOcena = prosecnaOcena;
+        this.naplata = naplata;
+        this.datumZavrsetka = datumZavrsetka;
+        this.student = student;
+        this.zaposleni = zaposleni;
+        this.program = program;
+        this.fakultet = fakultet;
+        this.zvanje = zvanje;
+    }
 
     public Long getRedniBroj() {
         return redniBroj;
@@ -108,24 +126,22 @@ public class UverenjeODiplomiranju extends DomainObject{
         this.fakultet = fakultet;
     }
 
-    public Zvanje getZvanje() {
+    public String getZvanje() {
         return zvanje;
     }
 
-    public void setZvanje(Zvanje zvanje) {
+    public void setZvanje(String zvanje) {
         this.zvanje = zvanje;
     }
-    
-    
 
     @Override
     public String getTableName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "uverenjeodiplomiranju";
     }
 
     @Override
     public String getAllColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " ud.*, s.ime, s.prezime ";
     }
 
     @Override
@@ -160,12 +176,59 @@ public class UverenjeODiplomiranju extends DomainObject{
 
     @Override
     public List<DomainObject> getObjectsFromResultSet(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<DomainObject> uverenja = new ArrayList<>();
+        while (rs.next()) {
+            Long redniBroj = rs.getLong(1);
+            Date datum = rs.getDate(2);
+            int godinaU = rs.getInt(3);
+            double ocena = rs.getDouble(4);
+            int naplata = rs.getInt(5);
+            Date zavrsetka = rs.getDate(6);
+
+            Student s = new Student();
+            s.setJmbg(rs.getString(7));
+
+            Zaposleni z = new Zaposleni();
+            z.setZaposleniId(rs.getLong(8));
+
+            StudijskiProgram sp = new StudijskiProgram();
+            sp.setProgramId(rs.getLong(9));
+
+            Fakultet fak = new Fakultet();
+            fak.setFakultetId(rs.getLong(10));
+
+            String zvanje = rs.getString(11);
+
+            try {
+                String ime = rs.getString(12);
+                String prezime = rs.getString(13);
+                s.setIme(ime);
+                s.setPrezime(prezime);
+            } catch (Exception e) {
+                System.out.println("ne postoji ime i prezime");
+            }
+
+            UverenjeODiplomiranju ud = new UverenjeODiplomiranju(redniBroj, datum, godinaU,
+                    ocena, naplata, zavrsetka, s, z, sp, fak, zvanje);
+            uverenja.add(ud);
+        }
+        return uverenja;
     }
 
     @Override
     public String getOrderByColumn() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " rednibroj ";
     }
-    
+
+    @Override
+    public String alijas() {
+        return " ud ";
+    }
+
+    @Override
+    public String getJoin() {
+        //return "";
+        return "join student s on (s.jmbg = ud.jmbg)";
+    }
+
 }
