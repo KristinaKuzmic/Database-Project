@@ -12,6 +12,8 @@ import domain.object.entities.StudentskiCentar;
 import domain.object.entities.StudijskiProgram;
 import domain.object.entities.Uplatnica;
 import domain.object.entities.UverenjeODiplomiranju;
+import domain.object.entities.UverenjeOStudiranju;
+import domain.object.entities.UverenjeOStudiranjuOsnovno;
 import domain.object.entities.Valuta;
 import domain.object.entities.Zaposleni;
 import java.sql.SQLException;
@@ -186,6 +188,24 @@ public class Controller {
         List<Zaposleni> z = (List<Zaposleni>) (Object) dbBroker.getAllWithWhere(new Zaposleni(), string);
         dbBroker.disconnect();
         return z;
+    }
+
+    public void insertUverenjeODiplomiranju(UverenjeODiplomiranju ud) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public List<UverenjeOStudiranjuOsnovno> getAllUverenjeOsnovno() throws Exception {
+        dbBroker.connect();
+        List<UverenjeOStudiranjuOsnovno> uso = (LinkedList<UverenjeOStudiranjuOsnovno>) (Object) dbBroker.getAll(new UverenjeOStudiranjuOsnovno());
+        dbBroker.disconnect();
+        return uso;
+    }
+
+    public List<UverenjeOStudiranju> getAllUverenje() throws Exception {
+        dbBroker.connect();
+        List<UverenjeOStudiranju> uos = (LinkedList<UverenjeOStudiranju>) (Object) dbBroker.getAll(new UverenjeOStudiranju());
+        dbBroker.disconnect();
+        return uos;
     }
 
 }

@@ -140,4 +140,6 @@ public class NivoStudija extends DomainObject{
         return "";
     }
     
+    
+    
 }
