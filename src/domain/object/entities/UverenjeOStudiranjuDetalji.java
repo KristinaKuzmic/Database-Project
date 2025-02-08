@@ -8,6 +8,7 @@ import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -20,6 +21,18 @@ public class UverenjeOStudiranjuDetalji extends DomainObject{
     private Date datum;
     private String napomena;
     private Zaposleni zaposleni;
+
+    public UverenjeOStudiranjuDetalji() {
+    }
+
+    public UverenjeOStudiranjuDetalji(Long redniBroj, Date datum, String napomena, Zaposleni zaposleni) {
+        this.redniBroj = redniBroj;
+        this.datum = datum;
+        this.napomena = napomena;
+        this.zaposleni = zaposleni;
+    }
+    
+    
 
     public Long getRedniBroj() {
         return redniBroj;
@@ -57,12 +70,12 @@ public class UverenjeOStudiranjuDetalji extends DomainObject{
 
     @Override
     public String getTableName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " uverenjeostudiranju_detalji";
     }
 
     @Override
     public String getAllColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " usd.*, z.ime, z.prezime ";
     }
 
     @Override
@@ -97,12 +110,37 @@ public class UverenjeOStudiranjuDetalji extends DomainObject{
 
     @Override
     public List<DomainObject> getObjectsFromResultSet(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<DomainObject> uverenja = new LinkedList<>();
+        while (rs.next()) {            
+            Long rbr = rs.getLong(1);
+            Date datum = rs.getDate(2);
+            String napomena = rs.getString(3);
+            
+            Zaposleni z = new Zaposleni();
+            z.setZaposleniId(rs.getLong(4));
+            z.setIme(rs.getString(5));
+            z.setPrezime(rs.getString(6));
+            
+            UverenjeOStudiranjuDetalji usd = new UverenjeOStudiranjuDetalji(rbr, datum, napomena, z);
+            uverenja.add(usd);
+            
+        }
+        return uverenja;
     }
 
     @Override
     public String getOrderByColumn() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " rednibroj ";
+    }
+
+    @Override
+    public String alijas() {
+        return " usd ";
+    }
+
+    @Override
+    public String getJoin() {
+        return " left join zaposleni z on (z.zaposleniid = usd.zaposleniid)";
     }
     
 }

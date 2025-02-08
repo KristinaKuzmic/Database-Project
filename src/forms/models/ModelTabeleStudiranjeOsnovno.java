@@ -16,13 +16,13 @@ import javax.swing.table.AbstractTableModel;
  */
 public class ModelTabeleStudiranjeOsnovno extends AbstractTableModel{
     
-    List<UverenjeOStudiranju> osnovno;
+    List<UverenjeOStudiranjuOsnovno> osnovno;
 
-    public List<UverenjeOStudiranju> getOsnovno() {
+    public List<UverenjeOStudiranjuOsnovno> getOsnovno() {
         return osnovno;
     }
 
-    public ModelTabeleStudiranjeOsnovno(List<UverenjeOStudiranju> osnovno) {
+    public ModelTabeleStudiranjeOsnovno(List<UverenjeOStudiranjuOsnovno> osnovno) {
         this.osnovno = osnovno;
     }
 
@@ -41,7 +41,7 @@ public class ModelTabeleStudiranjeOsnovno extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        UverenjeOStudiranju uso= osnovno.get(rowIndex);
+        UverenjeOStudiranjuOsnovno uso= osnovno.get(rowIndex);
         switch (columnIndex) {
             case 0: return uso.getRedniBroj();
             case 1: return uso.getStudent();
@@ -67,7 +67,7 @@ public class ModelTabeleStudiranjeOsnovno extends AbstractTableModel{
     }
     
     public void osvezi() throws Exception{
-        osnovno = Controller.getInstance().getAllUverenje();
+        osnovno = Controller.getInstance().getAllUverenjeOsnovno();
         fireTableDataChanged();
     }
     

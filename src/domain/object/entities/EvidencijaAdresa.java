@@ -8,6 +8,7 @@ import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,6 +23,30 @@ public class EvidencijaAdresa extends DomainObject{
     private Ulica ulica;
     private Mesto mesto;
     private Grad grad;
+    private Long evidencijaid;
+
+    public EvidencijaAdresa() {
+    }
+
+    public EvidencijaAdresa(Date datumPromeneAdrese, LicnaKarta licnaKarta, Broj broj, Ulica ulica, Mesto mesto, Grad grad, Long evidencijaId) {
+        this.datumPromeneAdrese = datumPromeneAdrese;
+        this.licnaKarta = licnaKarta;
+        this.broj = broj;
+        this.ulica = ulica;
+        this.mesto = mesto;
+        this.grad = grad;
+        this.evidencijaid = evidencijaId;
+    }
+
+    public Long getEvidencijaid() {
+        return evidencijaid;
+    }
+
+    public void setEvidencijaid(Long evidencijaid) {
+        this.evidencijaid = evidencijaid;
+    }
+    
+    
 
     public Date getDatumPromeneAdrese() {
         return datumPromeneAdrese;
@@ -75,12 +100,12 @@ public class EvidencijaAdresa extends DomainObject{
 
     @Override
     public String getTableName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " evidencija_adresa ";
     }
 
     @Override
     public String getAllColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " * ";
     }
 
     @Override
@@ -115,12 +140,46 @@ public class EvidencijaAdresa extends DomainObject{
 
     @Override
     public List<DomainObject> getObjectsFromResultSet(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<DomainObject> evidenicija = new LinkedList<>();
+        while (rs.next()) {            
+            Long evidencijaId= rs.getLong(1);
+            Date datum = rs.getDate(2);
+            Long brojLicne = rs.getLong(3);
+            
+            LicnaKarta lk = new LicnaKarta();
+            lk.setBrojLicneKarte(brojLicne);
+            
+            Broj b = new Broj();
+            b.setBrojId(rs.getLong(4));
+            
+            Ulica u = new Ulica();
+            u.setUlicaId(rs.getLong(5));
+            
+            Mesto m = new Mesto();
+            m.setMestoid(rs.getLong(6));
+            
+            Grad g = new Grad();
+            g.setPostanskiBroj(rs.getLong(7));
+            
+            EvidencijaAdresa ea = new EvidencijaAdresa(datum, lk, b, u, m, g, evidencijaId);
+            evidenicija.add(ea);
+        }
+        return evidenicija;
     }
 
     @Override
     public String getOrderByColumn() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " evidencijaid ";
+    }
+
+    @Override
+    public String alijas() {
+        return " e "; 
+    }
+
+    @Override
+    public String getJoin() {
+        return "";
     }
     
 }

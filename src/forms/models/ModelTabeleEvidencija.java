@@ -34,12 +34,32 @@ public class ModelTabeleEvidencija extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return 3;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        EvidencijaAdresa ea = adrese.get(rowIndex);
+        switch (columnIndex) {
+            case 0: return ea.getEvidencijaid();
+            case 1: return ea.getLicnaKarta();
+            case 2: return ea.getDatumPromeneAdrese();
+            default:
+                throw new AssertionError();
+        }
     }
+
+    @Override
+    public String getColumnName(int column) {
+        switch (column) {
+            case 0: return "Evidencija id";
+            case 1: return "Licna karta";
+            case 2: return "Datum promene adrese";
+            default:
+                throw new AssertionError();
+        }
+    }
+    
+    
     
 }

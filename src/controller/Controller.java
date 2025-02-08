@@ -5,7 +5,9 @@
 package controller;
 
 import dbbroker.DBBroker;
+import domain.object.entities.EvidencijaAdresa;
 import domain.object.entities.Fakultet;
+import domain.object.entities.LicnaKarta;
 import domain.object.entities.NivoStudija;
 import domain.object.entities.Student;
 import domain.object.entities.StudentskiCentar;
@@ -13,6 +15,7 @@ import domain.object.entities.StudijskiProgram;
 import domain.object.entities.Uplatnica;
 import domain.object.entities.UverenjeODiplomiranju;
 import domain.object.entities.UverenjeOStudiranju;
+import domain.object.entities.UverenjeOStudiranjuDetalji;
 import domain.object.entities.UverenjeOStudiranjuOsnovno;
 import domain.object.entities.Valuta;
 import domain.object.entities.Zaposleni;
@@ -206,6 +209,34 @@ public class Controller {
         List<UverenjeOStudiranju> uos = (LinkedList<UverenjeOStudiranju>) (Object) dbBroker.getAll(new UverenjeOStudiranju());
         dbBroker.disconnect();
         return uos;
+    }
+
+    public List<UverenjeOStudiranjuDetalji> getAllUverenjeDetalji() throws Exception {
+        dbBroker.connect();
+        List<UverenjeOStudiranjuDetalji> uos = (LinkedList<UverenjeOStudiranjuDetalji>) (Object) dbBroker.getAll(new UverenjeOStudiranjuDetalji());
+        dbBroker.disconnect();
+        return uos;
+    }
+
+    public List<UverenjeOStudiranju> findUverenje(String string) throws Exception {
+        dbBroker.connect();
+        List<UverenjeOStudiranju> uverenja = (List<UverenjeOStudiranju>) (Object) dbBroker.getAllWithWhere(new UverenjeOStudiranju(), string);
+        dbBroker.disconnect();
+        return  uverenja;
+    }
+
+    public List<LicnaKarta> getAllLicnaKarta() throws Exception {
+        dbBroker.connect();
+        List<LicnaKarta> lk = (List<LicnaKarta>) (Object) dbBroker.getAll(new LicnaKarta());
+        dbBroker.disconnect();
+        return lk;
+    }
+
+    public List<EvidencijaAdresa> findEvidencija(String string) throws Exception {
+        dbBroker.connect();
+        List<EvidencijaAdresa> evidencija = (List<EvidencijaAdresa>) (Object) dbBroker.getAllWithWhere(new EvidencijaAdresa(), string);
+        dbBroker.disconnect();
+        return evidencija;
     }
 
 }

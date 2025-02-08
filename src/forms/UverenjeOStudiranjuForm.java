@@ -9,7 +9,9 @@ import domain.object.entities.Fakultet;
 import domain.object.entities.NivoStudija;
 import domain.object.entities.Student;
 import domain.object.entities.StudijskiProgram;
+import domain.object.entities.UverenjeOStudiranju;
 import domain.object.entities.Zaposleni;
+import forms.models.ModelTabeleStudiranjeDetalji;
 import forms.models.ModelTabeleStudiranjeOsnovno;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -17,15 +19,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
  * @author Kristina
  */
 public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
-    
+
     private List<Zaposleni> zaposleni = new LinkedList<>();
     private List<StudijskiProgram> programi = new LinkedList<>();
+    private List<UverenjeOStudiranju> uverenjaPogled = new LinkedList<>();
 
     /**
      * Creates new form UverenjeOStudiranjuForm
@@ -33,9 +39,13 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
     public UverenjeOStudiranjuForm() throws Exception {
         initComponents();
         setLocationRelativeTo(null);
-        ModelTabeleStudiranjeOsnovno model = new ModelTabeleStudiranjeOsnovno(Controller.getInstance().getAllUverenje());
+        ModelTabeleStudiranjeOsnovno model = new ModelTabeleStudiranjeOsnovno(Controller.getInstance().getAllUverenjeOsnovno());
         tblOsnovno.setModel(model);
+        ModelTabeleStudiranjeDetalji model1 = new ModelTabeleStudiranjeDetalji(Controller.getInstance().getAllUverenjeDetalji());
+        tblDetalji.setModel(model1);
         popuniComboBox();
+        setTableListenerOsnovno();
+        setTableListenerDetalji();
     }
 
     /**
@@ -383,9 +393,10 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
 
     public void popuniComboBox() throws Exception {
         popuniStudenta();
+        popuniNivoe();
         popuniFakultet();
         popuniProgrameNaOsnovuIzabranogFakulteta();
-        popuniNivoe();
+        //popuniNivoe();
     }
 
     private void popuniStudenta() throws Exception {
@@ -429,10 +440,10 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
 
         });
     }
-    
+
     private List<Zaposleni> pronadjiZaposlene(Object selectedItem) throws Exception {
         Fakultet fak = (Fakultet) selectedItem;
-        return Controller.getInstance().findZaposleni("fakultetid = "+fak.getFakultetId());
+        return Controller.getInstance().findZaposleni("fakultetid = " + fak.getFakultetId());
     }
 
     private List<StudijskiProgram> pronadjiPrograme(Object selectedItem) throws Exception {
@@ -447,5 +458,87 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
             cmbNivoStudija.addItem(ns);
         }
         cmbNivoStudija.setSelectedItem(null);
+    }
+
+    private void popuniFormu(UverenjeOStudiranju uverenje) throws Exception {
+        if (uverenje != null) {
+            txtRedniBroj.setText(String.valueOf(uverenje.getRedniBroj()));
+            txtDatum.setText(String.valueOf(uverenje.getDatum()));
+            txtNapomena.setText(uverenje.getNapomena());
+            txtSkolskagodina.setText(uverenje.getSkolskaGodina());
+            txtStatus.setText(uverenje.getStatus());
+            txtBrojPuta.setText(String.valueOf(uverenje.getBrojPutaUpisa()));
+            txtGodinaStudija.setText(String.valueOf(uverenje.getGodinaStuidja()));
+            
+            if(uverenje.getNivoStudija()==null || uverenje.getNivoStudija().getNivoId()==0){
+                cmbNivoStudija.setSelectedItem(null);
+            }else{
+                cmbNivoStudija.setSelectedItem(uverenje.getNivoStudija());
+            }
+            
+            if (uverenje.getStudent().getJmbg() == null || uverenje.getStudent().getJmbg().isEmpty()) {
+                cmbStudent.setSelectedItem(null);
+            } else {
+                cmbStudent.setSelectedItem(uverenje.getStudent());
+            }
+           
+            if (uverenje.getFakultet().getFakultetId() != 0) {
+                List<Fakultet> fak = Controller.getInstance().findFakultet("fakultetid = " + uverenje.getFakultet().getFakultetId());
+                cmbFakultet.setSelectedItem(fak.get(0));
+            } else {
+                cmbFakultet.setSelectedItem(null);
+            }
+            if (uverenje.getProgram().getProgramId() != 0) {
+                List<StudijskiProgram> sp = Controller.getInstance().findProgrami("programid = " + uverenje.getProgram().getProgramId());
+
+                cmbProgram.setSelectedItem(sp.get(0));
+            } else {
+                cmbProgram.setSelectedItem(null);
+            }
+            if (uverenje.getZaposleni().getZaposleniId() != 0) {
+                List<Zaposleni> z = Controller.getInstance().findZaposleni("zaposleniid = " + uverenje.getZaposleni().getZaposleniId());
+                cmbZaposleni.setSelectedItem(z.get(0));
+            } else {
+                cmbZaposleni.setSelectedItem(null);
+            }
+
+        }
+    }
+
+    private void setTableListenerOsnovno() {
+        tblOsnovno.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    try {
+                        ModelTabeleStudiranjeOsnovno model = (ModelTabeleStudiranjeOsnovno) tblOsnovno.getModel();
+                        Long redniBroj = model.getOsnovno().get(tblOsnovno.getSelectedRow()).getRedniBroj();
+                        uverenjaPogled = Controller.getInstance().findUverenje("rednibroj= " + redniBroj);
+                        popuniFormu(uverenjaPogled.get(0));
+                    } catch (Exception ex) {
+                        Logger.getLogger(UverenjeOStudiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+        });
+    }
+
+    private void setTableListenerDetalji() {
+        tblDetalji.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    try {
+                        ModelTabeleStudiranjeDetalji model = (ModelTabeleStudiranjeDetalji) tblDetalji.getModel();
+                        Long redniBroj = model.getUverenje().get(tblDetalji.getSelectedRow()).getRedniBroj();
+                        uverenjaPogled = Controller.getInstance().findUverenje("rednibroj =" + redniBroj);
+                        popuniFormu(uverenjaPogled.get(0));
+                    } catch (Exception ex) {
+                        Logger.getLogger(UverenjeOStudiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
     }
 }

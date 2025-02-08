@@ -156,7 +156,7 @@ public class UverenjeOStudiranju extends DomainObject {
 
     @Override
     public String getJoin() {
-        return " join student s on (s.jmbg=uos.jmbg) join nivostudija ns on (uos.nivoid = ns.nivoid)";
+        return " left join student s on (s.jmbg=uos.jmbg) left join nivostudija ns on (uos.nivoid = ns.nivoid)";
     }
 
     @Override
@@ -229,6 +229,7 @@ public class UverenjeOStudiranju extends DomainObject {
             s.setPrezime(prezime);
 
             String nivo = rs.getString(15);
+            System.out.println(nivo);
             ns.setNaziv(nivo);
             UverenjeOStudiranju uos = new UverenjeOStudiranju(id, skolskaGodina, status, brojPuta,
                     godinaStudija, s, ns, sp, f, datum, napomena, z);

@@ -34,12 +34,32 @@ public class ModelTabeleLicnaKarta  extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return 3;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        LicnaKarta lk= licneKarte.get(rowIndex);
+        switch (columnIndex) {
+            case 0: return lk.getBrojLicneKarte();
+            case 1: return lk.getStudent();
+            case 2: return lk.getBrojPromeneAdrese();
+            default:
+                throw new AssertionError();
+        }
     }
+
+    @Override
+    public String getColumnName(int column) {
+        switch (column) {
+            case 0: return "Broj licne karte";
+            case 1: return "Student";
+            case 2: return "Broj promena Adrese";
+            default:
+                throw new AssertionError();
+        }
+    }
+    
+    
     
 }

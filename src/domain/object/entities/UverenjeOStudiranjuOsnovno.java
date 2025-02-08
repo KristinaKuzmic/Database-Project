@@ -208,7 +208,7 @@ public class UverenjeOStudiranjuOsnovno extends DomainObject{
 
     @Override
     public String getJoin() {
-        return " join student s on (s.jmbg=uso.jmbg) join nivostudija ns on (uso.nivoid = ns.nivoid)";
+        return " left join student s on (s.jmbg=uso.jmbg) left join nivostudija ns on (uso.nivoid = ns.nivoid)";
     }
     
 }

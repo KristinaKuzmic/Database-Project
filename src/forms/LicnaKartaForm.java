@@ -4,17 +4,35 @@
  */
 package forms;
 
+import controller.Controller;
+import domain.object.entities.EvidencijaAdresa;
+import domain.object.entities.LicnaKarta;
+import forms.models.ModelTabeleEvidencija;
+import forms.models.ModelTabeleLicnaKarta;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 /**
  *
  * @author Kristina
  */
 public class LicnaKartaForm extends javax.swing.JFrame {
 
+    private List<EvidencijaAdresa> evidencija = new LinkedList<>();
+
     /**
      * Creates new form LicnaKartaForm
      */
-    public LicnaKartaForm() {
+    public LicnaKartaForm() throws Exception {
         initComponents();
+        setLocationRelativeTo(null);
+        ModelTabeleLicnaKarta model = new ModelTabeleLicnaKarta(Controller.getInstance().getAllLicnaKarta());
+        tblLicnaKarta.setModel(model);
+        setTableListener();
     }
 
     /**
@@ -245,7 +263,11 @@ public class LicnaKartaForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LicnaKartaForm().setVisible(true);
+                try {
+                    new LicnaKartaForm().setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(LicnaKartaForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -274,4 +296,29 @@ public class LicnaKartaForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtDatum;
     private javax.swing.JTextField txtRedniBroj;
     // End of variables declaration//GEN-END:variables
+
+    private void popuniTabeluZaOdgovaracuLicnu(LicnaKarta lk) throws Exception {
+        evidencija = Controller.getInstance().findEvidencija("brojLicneKarte = "+lk.getBrojLicneKarte());
+        ModelTabeleEvidencija model = new ModelTabeleEvidencija(evidencija);
+        tblEvidencijaAdresa.setModel(model);
+    }
+
+    private void setTableListener() {
+        tblLicnaKarta.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    try {
+                        ModelTabeleLicnaKarta model = (ModelTabeleLicnaKarta) tblLicnaKarta.getModel();
+                        LicnaKarta lk = model.getLicneKarte().get(tblLicnaKarta.getSelectedRow());
+                        popuniTabeluZaOdgovaracuLicnu(lk);
+                    } catch (Exception ex) {
+                        Logger.getLogger(LicnaKartaForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+        });
+
+    }
 }

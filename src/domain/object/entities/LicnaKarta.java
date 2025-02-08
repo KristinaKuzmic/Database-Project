@@ -8,6 +8,7 @@ import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -21,6 +22,39 @@ public class LicnaKarta extends DomainObject{
     private Date datumPrestanka;
     private Student student;
     private PolicijskaStanica policijskaStanica;
+    private int brojPromeneAdrese;
+
+    public LicnaKarta() {
+    }
+
+    public LicnaKarta(Long brojLicneKarte, Date datumIzdavanja, Date datumPrestanka, Student student, PolicijskaStanica policijskaStanica, int brojPromeneAdrese) {
+        this.brojLicneKarte = brojLicneKarte;
+        this.datumIzdavanja = datumIzdavanja;
+        this.datumPrestanka = datumPrestanka;
+        this.student = student;
+        this.policijskaStanica = policijskaStanica;
+        this.brojPromeneAdrese = brojPromeneAdrese;
+    }
+
+    public int getBrojPromeneAdrese() {
+        return brojPromeneAdrese;
+    }
+
+    public void setBrojPromeneAdrese(int brojPromeneAdrese) {
+        this.brojPromeneAdrese = brojPromeneAdrese;
+    }
+
+    @Override
+    public String getJoin() {
+        return " left join student s on (lk.jmbg = s.jmbg) ";
+    }
+
+    @Override
+    public String alijas() {
+        return " lk ";
+    }
+    
+    
 
     public Long getBrojLicneKarte() {
         return brojLicneKarte;
@@ -66,12 +100,12 @@ public class LicnaKarta extends DomainObject{
 
     @Override
     public String getTableName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " licna_karta ";
     }
 
     @Override
     public String getAllColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " lk.*, s.ime, s.prezime ";
     }
 
     @Override
@@ -106,12 +140,25 @@ public class LicnaKarta extends DomainObject{
 
     @Override
     public List<DomainObject> getObjectsFromResultSet(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<DomainObject> licneKarte = new LinkedList<>();
+        while (rs.next()) {            
+            Long brojLicneKarte = rs.getLong(1);
+            Date datumI = rs.getDate(2);
+            Date datumP = rs.getDate(3);
+            int broj = rs.getInt(4);
+            Student s = new Student();
+            s.setJmbg(rs.getString(5));
+            
+            LicnaKarta lk = new LicnaKarta(brojLicneKarte, datumI, datumP, 
+                    s, null, broj);
+            licneKarte.add(lk);
+        }
+        return licneKarte;
     }
 
     @Override
     public String getOrderByColumn() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " brojlicnekarte ";
     }
     
 }
