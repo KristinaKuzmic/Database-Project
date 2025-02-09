@@ -116,7 +116,7 @@ public class StudijskiProgram extends DomainObject {
 
     @Override
     public String getDeleteWhereClause() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return String.format("fakultetid=%d AND programid=%d", this.getFakultet().getFakultetId(), this.getProgramId());
     }
 
     @Override

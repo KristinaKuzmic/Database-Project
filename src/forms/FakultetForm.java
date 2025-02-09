@@ -39,8 +39,7 @@ public class FakultetForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         loadDataIntoForm();
         setUpTableListenerTblFakultet();
-        popuniFormuComboBox();
-        //setUpTableLiistenerTblStudijskiProgram();
+        setUpTableLiistenerTblStudijskiProgram();
 
     }
 
@@ -71,6 +70,7 @@ public class FakultetForm extends javax.swing.JFrame {
         btnIzmeniFakultet = new javax.swing.JButton();
         btnObrisi = new javax.swing.JButton();
         btnIzmeniProgram = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -140,6 +140,13 @@ public class FakultetForm extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("glavna forma");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -148,36 +155,36 @@ public class FakultetForm extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(btnSacuvaj)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(cmbNivo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(txtNaziv)
-                                            .addComponent(txtProgramId)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtNazivFakulteta, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)))))
-                        .addContainerGap(365, Short.MAX_VALUE))
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(655, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnIzmeniFakultet))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnSacuvaj)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE))
+                                            .addGap(18, 18, 18)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(cmbNivo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(txtNaziv)
+                                                .addComponent(txtProgramId)))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(txtNazivFakulteta, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1))
                             .addComponent(jScrollPane2)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnIzmeniFakultet)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(btnIzmeniProgram)
                                         .addGap(37, 37, 37)
@@ -189,7 +196,9 @@ public class FakultetForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -266,6 +275,9 @@ public class FakultetForm extends javax.swing.JFrame {
             StudijskiProgram studijskiProgram = izabraniProgram();
             
             popuniTabeluProgramima(izabraniFakultet().getFakultetId());
+            
+            orinalneVrednostiPrograma.clear();
+            sacuvajOriginalneVrednosti(tblFakultet);
         } catch (Exception ex) {
             Logger.getLogger(FakultetForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -280,11 +292,17 @@ public class FakultetForm extends javax.swing.JFrame {
             
             Controller.getInstance().updateProgram(sp, setClause);
             
-            ucitajPrograme();
+            popuniTabeluProgramima(sp.getFakultet().getFakultetId());
         } catch (Exception ex) {
             Logger.getLogger(FakultetForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnIzmeniProgramActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+        new MainForm().setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -293,6 +311,7 @@ public class FakultetForm extends javax.swing.JFrame {
     private javax.swing.JButton btnObrisi;
     private javax.swing.JButton btnSacuvaj;
     private javax.swing.JComboBox<Object> cmbNivo;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -310,6 +329,7 @@ public class FakultetForm extends javax.swing.JFrame {
 
     private void loadDataIntoForm() throws Exception {
         getAllFakultet();
+        popuniFormuComboBox();
     }
 
     private void getAllFakultet() throws Exception {
@@ -424,8 +444,8 @@ public class FakultetForm extends javax.swing.JFrame {
         txtProgramId.setText(String.valueOf(izabraniProgram.getProgramId()));
         txtNaziv.setText(izabraniProgram.getNaziv());
         txtNazivFakulteta.setText(izabraniProgram().getNazivFakulteta());
-        cmbNivo.addItem(izabraniProgram.getNivoStudija().getNaziv());
-        cmbNivo.setSelectedItem(izabraniProgram.getNivoStudija().getNaziv()); 
+        //cmbNivo.addItem(izabraniProgram.getNivoStudija().getNaziv());
+        cmbNivo.setSelectedItem(izabraniProgram.getNivoStudija()); 
     }
 
     private void setUpTableLiistenerTblStudijskiProgram() {
@@ -435,7 +455,8 @@ public class FakultetForm extends javax.swing.JFrame {
                 if (!e.getValueIsAdjusting()) {
                     try {
                         StudijskiProgram izabraniProgram = izabraniProgram();
-                        pronadjeniProgrami = Controller.getInstance().findProgrami("programid = '" + String.valueOf(izabraniProgram.getProgramId()) + "'");
+                        pronadjeniProgrami = Controller.getInstance().findProgrami("programid = '" + String.valueOf(izabraniProgram.getProgramId()) + 
+                                "' and fakultetid = '"+String.valueOf(izabraniProgram.getFakultet().getFakultetId())+"'");
                         if (pronadjeniProgrami != null && !pronadjeniProgrami.isEmpty()) {
                             izabraniProgram = pronadjeniProgrami.get(0);
                         }

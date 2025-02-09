@@ -17,11 +17,7 @@ public class Grad extends DomainObject{
 
     private Long postanskiBroj;
     private String naziv;
-    private Drzava drzava;
-
-    public Drzava getDrzava() {
-        return drzava;
-    }
+    
 
     public String getNaziv() {
         return naziv;
@@ -31,9 +27,7 @@ public class Grad extends DomainObject{
         return postanskiBroj;
     }
 
-    public void setDrzava(Drzava drzava) {
-        this.drzava = drzava;
-    }
+    
 
     public void setNaziv(String naziv) {
         this.naziv = naziv;

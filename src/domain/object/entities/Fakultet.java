@@ -8,6 +8,7 @@ import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -102,7 +103,7 @@ public class Fakultet extends DomainObject{
 
     @Override
     public List<DomainObject> getObjectsFromResultSet(ResultSet rs) throws SQLException {
-        List<DomainObject> fakulteti = new ArrayList<>();
+        List<DomainObject> fakulteti = new LinkedList<>();
         while(rs.next()){
             
             String nazivU = rs.getString(5);

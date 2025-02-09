@@ -439,8 +439,13 @@ public class UplatnicaForm extends javax.swing.JFrame {
         if (izbranaUplatnica != null) {
             txtUplatnicaId.setText(String.valueOf(izbranaUplatnica.getUplatnicaId()));
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-            txtDatum.setText(dateFormat.format(izbranaUplatnica.getDatum()));
+            if(izbranaUplatnica.getDatum()==null){
+                txtDatum.setText(null);
+            }else{
+                txtDatum.setText(dateFormat.format(izbranaUplatnica.getDatum()));
 
+            }
+            
             txtIznos.setText(String.valueOf(izbranaUplatnica.getIznos()));
             txtPozivNaBroj.setText(String.valueOf(izbranaUplatnica.getPozivNaBroj()));
             txtSifraPlacanja.setText(String.valueOf(izbranaUplatnica.getSifraPlacanja()));

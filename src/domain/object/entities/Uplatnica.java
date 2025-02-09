@@ -181,25 +181,28 @@ public class Uplatnica extends DomainObject{
 
     @Override
     public String getAllInsertColumnNames() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
+        /*SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
 
         String datumString = datum != null ? "TO_DATE('" + sdf.format(datum) + "', 'DD-MM-YY')" : "NULL";
         
         return String.format("%d, '%s', %s, %d, %d, %d, '%s', '%s', %d, %d, '%s', '%s', %d", this.uplatnicaId, this.Mesto, datumString, this.iznos,
                 this.model, this.pozivNaBroj, this.racunPlatioca, this.racunPrimaoca, this.sc.getScId(),
-                this.sifraPlacanja,this.student.getJmbg(), this.svrhaUplate, this.valuta.getValutaId());
+                this.sifraPlacanja,this.student.getJmbg(), this.svrhaUplate, this.valuta.getValutaId());*/
+        return null;
     }
 
     @Override
     public String getColumnValues() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
+        /*SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
         String datumString = datum != null ? "TO_DATE('" + sdf.format(datum) + "', 'DD-MM-YY')" : "NULL";
         return String.format("uplatnicaid = %d, mesto = '%s', datum = %s, iznos = %d, model = %d,"
                 + "pozivNaBroj= %d, racunPlatioca = '%s', racunPrimaoca = '%s', scid = %d, sifraplacanja = %d, jmbg '%s', "
                 + " svrhauplate = '%s', valutaid = %d", 
                 this.uplatnicaId, this.Mesto, datumString, this.iznos,
                 this.model, this.pozivNaBroj, this.racunPlatioca, this.racunPrimaoca, this.sc.getScId(),
-                this.sifraPlacanja,this.student.getJmbg(), this.svrhaUplate, this.valuta.getValutaId());
+                this.sifraPlacanja,this.student.getJmbg(), this.svrhaUplate, this.valuta.getValutaId());*/
+        
+        return null;
         
     }
 
