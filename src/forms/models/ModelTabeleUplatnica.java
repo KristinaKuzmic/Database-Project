@@ -6,6 +6,7 @@ package forms.models;
 
 import controller.Controller;
 import domain.object.entities.Uplatnica;
+import java.util.Date;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -75,8 +76,33 @@ public class ModelTabeleUplatnica extends AbstractTableModel {
         }
     }
 
-    public void osvezi() throws Exception{
-         uplatnice = Controller.getInstance().getAllUplatnica();
-         fireTableDataChanged();
+    public void osvezi() throws Exception {
+        uplatnice = Controller.getInstance().getAllUplatnica();
+        fireTableDataChanged();
     }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return true;
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        Uplatnica u = uplatnice.get(rowIndex);
+        switch (columnIndex) {
+            case 3:
+                u.getSc().setScId(Long.valueOf((String) aValue));
+                fireTableCellUpdated(rowIndex, columnIndex);
+                break;
+            case 4:
+                u.setNazivStudentskogCentra((String) aValue);
+                fireTableCellUpdated(rowIndex, columnIndex);
+                break;
+            default: {
+                throw new AssertionError();
+            }
+
+        }
+    }
+
 }

@@ -114,5 +114,12 @@ public class Valuta extends DomainObject{
     public String getJoin() {
         return "";
     }
+
+    @Override
+    public String toString() {
+        return naziv;
+    }
+    
+    
     
 }

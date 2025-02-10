@@ -170,7 +170,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 762, Short.MAX_VALUE)
+                        .addGap(0, 797, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)))
@@ -486,12 +486,15 @@ public class UplatnicaForm extends javax.swing.JFrame {
             String nazivsc = (String) mtu.getValueAt(i, 4);
 
             orinalneVrednosti.put(i, new String[]{String.valueOf(scid), nazivsc});
+                        System.out.println(orinalneVrednosti.get(0)[0]);
+
+            System.out.println(orinalneVrednosti.get(0)[1]);
         }
 
     }
 
-    private void ucitajNazivSC(String scid) throws Exception {
-        pronadjeniCentri = Controller.getInstance().findCentar("scid='"+scid+"'");
+    private void ucitajNazivSC(StudentskiCentar scid) throws Exception {
+        pronadjeniCentri = Controller.getInstance().findCentar("scid="+scid.getScId()+"");
         txtNazivCentra.setText(pronadjeniCentri.get(0).getNaziv());
     }
 
@@ -501,7 +504,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     try {
-                        ucitajNazivSC(cmbSCentar.getSelectedItem().toString());
+                        ucitajNazivSC((StudentskiCentar)cmbSCentar.getSelectedItem());
                     } catch (Exception ex) {
                     }
                 }
@@ -514,8 +517,11 @@ public class UplatnicaForm extends javax.swing.JFrame {
         ModelTabeleUplatnica mtu = (ModelTabeleUplatnica) this.tblUplatnica.getModel();
         StringBuilder stringBuilder = new StringBuilder(" ");
         
-        String scid = (String) mtu.getValueAt(selectedRow, 3);
+        Long scid = (Long) mtu.getValueAt(selectedRow, 3);
         String nazivSC = (String) mtu.getValueAt(selectedRow, 4);
+
+        
+        String scidStr = String.valueOf(scid);
         
         String[] original = orinalneVrednosti.get(selectedRow);
         String orgSCID = original[0];
@@ -523,15 +529,17 @@ public class UplatnicaForm extends javax.swing.JFrame {
         
         boolean needComma = false;
         
-        if (!scid.equals(orgSCID)) {
+        if (!scidStr.equals(orgSCID)) {
+            System.out.println("poredimo sad '"+scidStr+"' sa '"+orgSCID+"'");
             stringBuilder.append("scid = '").append(scid).append("'");
             needComma = true;
         }
         if (!nazivSC.equals(orgNaziv)) {
+            System.out.println("poredim '"+nazivSC+"' sa '"+orgNaziv+"'");
             if (needComma) {
                 stringBuilder.append(", ");
             }
-            stringBuilder.append("naziv = '").append(nazivSC).append("'");
+            stringBuilder.append("naziv_sc = '").append(nazivSC).append("'");
         }
         return stringBuilder.toString();
         
@@ -549,12 +557,13 @@ public class UplatnicaForm extends javax.swing.JFrame {
                 Logger.getLogger(UplatnicaForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        Long id = Long.parseLong(txtUplatnicaId.getText());
         int isnos = Integer.parseInt(txtIznos.getText());
         int pozivNaBroj = Integer.parseInt(txtPozivNaBroj.getText());
         int sifra = Integer.parseInt(txtSifraPlacanja.getText());
         int model = Integer.parseInt(txtModel.getText());
         
-        Uplatnica u = new Uplatnica(Long.MIN_VALUE, date, isnos, pozivNaBroj, 
+        Uplatnica u = new Uplatnica(id, date, isnos, pozivNaBroj, 
                 sifra, txtMesto.getText(), 
                 model, txtRacunPlatioca.getText(), txtRacunPrimaoca.getText(), 
                 txtSvrhaUplate.getText(), (StudentskiCentar) cmbSCentar.getSelectedItem(), 
