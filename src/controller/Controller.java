@@ -22,6 +22,7 @@ import domain.object.entities.Zaposleni;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -88,7 +89,12 @@ public class Controller {
 
     public void updateProgram(StudijskiProgram sp, String setClause) throws Exception {
         dbBroker.connect();
-        dbBroker.updatePartial(sp, setClause);
+        try {
+            dbBroker.updatePartial(sp, setClause);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
         dbBroker.disconnect();
     }
 
@@ -136,7 +142,12 @@ public class Controller {
 
     public void updateUplatnica(Uplatnica u, String setClause) throws Exception {
         dbBroker.connect();
-        dbBroker.updatePartial(u, setClause);
+        try {
+            dbBroker.updatePartial(u, setClause);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
         dbBroker.disconnect();
     }
 
@@ -179,7 +190,7 @@ public class Controller {
         return uverenja;
     }
 
-    public List<Zaposleni> getAllZaposleni() throws  Exception {
+    public List<Zaposleni> getAllZaposleni() throws Exception {
         dbBroker.connect();
         List<Zaposleni> zaposleni = (List<Zaposleni>) (Object) dbBroker.getAll(new Zaposleni());
         dbBroker.disconnect();
@@ -222,7 +233,7 @@ public class Controller {
         dbBroker.connect();
         List<UverenjeOStudiranju> uverenja = (List<UverenjeOStudiranju>) (Object) dbBroker.getAllWithWhere(new UverenjeOStudiranju(), string);
         dbBroker.disconnect();
-        return  uverenja;
+        return uverenja;
     }
 
     public List<LicnaKarta> getAllLicnaKarta() throws Exception {
@@ -237,6 +248,12 @@ public class Controller {
         List<EvidencijaAdresa> evidencija = (List<EvidencijaAdresa>) (Object) dbBroker.getAllWithWhere(new EvidencijaAdresa(), string);
         dbBroker.disconnect();
         return evidencija;
+    }
+
+    public void insertUverenjePogled(UverenjeOStudiranju uos) throws Exception {
+        dbBroker.connect();
+        dbBroker.insert(uos);
+        dbBroker.disconnect();
     }
 
 }

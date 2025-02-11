@@ -7,6 +7,7 @@ package domain.object.entities;
 import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -166,12 +167,19 @@ public class UverenjeOStudiranju extends DomainObject {
 
     @Override
     public String getAllInsertColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "rednibroj, skolskaGodina, status, brojPutaUpisa, jmbg, godinaStudija, nivoid,"
+                + " programid, fakultetid, datum, napomena, zaposleniid";
     }
 
     @Override
     public String getColumnValues() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String datumString = datum != null ? "TO_DATE('" + sdf.format(datum) + "', 'DD-MM-YY')" : "NULL";
+
+        return String.format("%d, '%s', '%s', %d, '%s', %d, %d, %d, %d, %s, '%s', %d", redniBroj, skolskaGodina,
+                status, brojPutaUpisa, student.getJmbg(),
+                godinaStuidja, nivoStudija.getNivoId(), program.getProgramId(), fakultet.getFakultetId(),datumString,
+                 napomena, zaposleni.getZaposleniId());
     }
 
     @Override

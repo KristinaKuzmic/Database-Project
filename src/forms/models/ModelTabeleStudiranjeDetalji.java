@@ -4,6 +4,7 @@
  */
 package forms.models;
 
+import controller.Controller;
 import domain.object.entities.UverenjeOStudiranjuDetalji;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -59,6 +60,11 @@ public class ModelTabeleStudiranjeDetalji extends AbstractTableModel{
             default:
                 throw new AssertionError();
         }
+    }
+    
+    public void osvezi() throws Exception{
+        uverenje = Controller.getInstance().getAllUverenjeDetalji();
+        fireTableDataChanged();
     }
     
     

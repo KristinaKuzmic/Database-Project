@@ -15,6 +15,9 @@ import forms.models.ModelTabeleStudiranjeDetalji;
 import forms.models.ModelTabeleStudiranjeOsnovno;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -121,6 +124,11 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
         jLabel13.setText("Datum");
 
         jButton1.setText("sacuvaj");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         tblOsnovno.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -314,6 +322,27 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            // TODO add your handling code here:
+            
+            UverenjeOStudiranju uos = preuzmiPodatkeSaForme();
+            
+            Controller.getInstance().insertUverenjePogled(uos);
+            
+            ModelTabeleStudiranjeDetalji model1 = (ModelTabeleStudiranjeDetalji) tblDetalji.getModel();
+            
+            ModelTabeleStudiranjeOsnovno model2 = (ModelTabeleStudiranjeOsnovno) tblOsnovno.getModel();
+            
+            model1.osvezi();
+            model2.osvezi();
+        } catch (Exception ex) {
+            Logger.getLogger(UverenjeOStudiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -540,5 +569,32 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
                 }
             }
         });
+    }
+
+    private UverenjeOStudiranju preuzmiPodatkeSaForme() {
+        SimpleDateFormat sdf = new SimpleDateFormat("DD-MM-YYYY");
+        Long rbr = Long.parseLong(txtRedniBroj.getText());
+        Date datum = null;
+        try {
+            datum = sdf.parse(txtDatum.getText());
+        } catch (ParseException ex) {
+            Logger.getLogger(UverenjeOStudiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String skolskaGod = txtSkolskagodina.getText();
+        String status = txtStatus.getText();
+        int brojPuta = Integer.valueOf(txtBrojPuta.getText());
+        int godStud = Integer.valueOf(txtGodinaStudija.getText());
+        String napomena = txtNapomena.getText();
+        Student s = (Student) cmbStudent.getSelectedItem();
+        Fakultet f= (Fakultet) cmbFakultet.getSelectedItem();
+        StudijskiProgram sp = (StudijskiProgram) cmbProgram.getSelectedItem();
+        Zaposleni z = (Zaposleni) cmbZaposleni.getSelectedItem();
+        NivoStudija ns = (NivoStudija) cmbNivoStudija.getSelectedItem();
+        
+        
+        UverenjeOStudiranju uos = new UverenjeOStudiranju(rbr, skolskaGod, status, 
+                brojPuta, godStud, s, ns, sp, f, datum, napomena, z);
+        System.out.println(uos.getDatum());
+        return uos;
     }
 }
