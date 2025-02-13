@@ -194,12 +194,12 @@ public class UverenjeOStudiranju extends DomainObject {
 
     @Override
     public String getUpdateWhereClause() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return String.format("redniBroj=%d", redniBroj);
     }
 
     @Override
     public String getDeleteWhereClause() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return String.format("redniBroj=%d", redniBroj);
     }
 
     @Override

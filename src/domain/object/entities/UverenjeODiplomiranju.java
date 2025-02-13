@@ -7,8 +7,10 @@ package domain.object.entities;
 import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -146,12 +148,18 @@ public class UverenjeODiplomiranju extends DomainObject {
 
     @Override
     public String getAllInsertColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "rednibroj, datum, godinaupisa, prosecnaocena, naplata, datumzavrsetka, jmbg, zaposleniid, programid, fakultetid, zvanje";
     }
 
     @Override
     public String getColumnValues() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String datumString = datum != null ? "TO_DATE('" + sdf.format(datum) + "', 'dd-MM-yy')" : "NULL";
+        String datumString2 = datumZavrsetka != null ? "TO_DATE('" + sdf.format(datumZavrsetka) + "', 'dd-MM-yy')" : "NULL";
+
+        return String.format("%d, %s, %d, %4.2f, %d, %s, '%s', %d, %d, %d, '%s'", redniBroj, datumString, godinaUpisa,
+                prosecnaOcena, naplata, datumString2, student.getJmbg(), zaposleni.getZaposleniId(),
+                program.getProgramId(), fakultet.getFakultetId(), zvanje);
     }
 
     @Override
@@ -176,7 +184,7 @@ public class UverenjeODiplomiranju extends DomainObject {
 
     @Override
     public List<DomainObject> getObjectsFromResultSet(ResultSet rs) throws SQLException {
-        List<DomainObject> uverenja = new ArrayList<>();
+        List<DomainObject> uverenja = new LinkedList<>();
         while (rs.next()) {
             Long redniBroj = rs.getLong(1);
             Date datum = rs.getDate(2);

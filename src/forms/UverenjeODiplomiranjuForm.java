@@ -14,10 +14,12 @@ import forms.models.ModelTabeleDiplomiranje;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.StyleConstants;
@@ -399,7 +401,7 @@ public class UverenjeODiplomiranjuForm extends javax.swing.JFrame {
         if (ud != null) {
             txtRedniBroj.setText(String.valueOf(ud.getRedniBroj()));
             txtGodinaUpisa.setText(String.valueOf(ud.getGodinaUpisa()));
-            txtProsecnaOcena.setText(String.valueOf(ud.getGodinaUpisa()));
+            txtProsecnaOcena.setText(String.valueOf(ud.getProsecnaOcena()));
             txtNaplata.setText(String.valueOf(ud.getNaplata()));
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
             if (ud.getDatum() != null) {
@@ -584,7 +586,30 @@ public class UverenjeODiplomiranjuForm extends javax.swing.JFrame {
     }
 
     private UverenjeODiplomiranju preuzmiPodatkeSaForme() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Long redniBroj = Long.valueOf(txtRedniBroj.getText());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String datumStr = txtDatumIzdavanja.getText();
+        String datumZav = txtDatumZavrsetka.getText();
+        Date datumIzdavanja = null;
+        Date datumZavrsetka = null;
+        try {
+            datumZavrsetka = sdf.parse(datumZav);
+            datumIzdavanja = sdf.parse(datumStr);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Datum nije u dobrom formatu");
+        }
+        int godinaUpisa = Integer.valueOf(txtGodinaUpisa.getText());
+        double prosecnaOcena = Double.valueOf(txtProsecnaOcena.getText());
+        int naplata = Integer.valueOf(txtNaplata.getText());
+        Student s = (Student) cmbStudent.getSelectedItem();
+        Zaposleni z = (Zaposleni) cmbZaposleni.getSelectedItem();
+        Fakultet f = (Fakultet) cmbFakultet.getSelectedItem();
+        StudijskiProgram sp = (StudijskiProgram) cmbProgram.getSelectedItem();
+        String zvanje = txtZvanje.getText();
+        
+        UverenjeODiplomiranju ud = new UverenjeODiplomiranju(redniBroj, datumIzdavanja, godinaUpisa, 
+                prosecnaOcena, naplata, datumZavrsetka, s, z, sp, f, zvanje);
+        return ud;
     }
 
 }

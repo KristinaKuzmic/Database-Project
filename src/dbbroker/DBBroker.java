@@ -122,6 +122,7 @@ public class DBBroker {
      public int delete(DomainObject object) throws SQLException{
          Statement statement = connection.createStatement();
          String query = "delete from " + object.getTableName() + " where " + object.getDeleteWhereClause();
+         System.out.println(query);
          return statement.executeUpdate(query);
      }
     

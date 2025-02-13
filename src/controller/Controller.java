@@ -204,8 +204,10 @@ public class Controller {
         return z;
     }
 
-    public void insertUverenjeODiplomiranju(UverenjeODiplomiranju ud) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void insertUverenjeODiplomiranju(UverenjeODiplomiranju ud) throws Exception {
+        dbBroker.connect();
+        dbBroker.insert(ud);
+        dbBroker.disconnect();
     }
 
     public List<UverenjeOStudiranjuOsnovno> getAllUverenjeOsnovno() throws Exception {
@@ -253,6 +255,18 @@ public class Controller {
     public void insertUverenjePogled(UverenjeOStudiranju uos) throws Exception {
         dbBroker.connect();
         dbBroker.insert(uos);
+        dbBroker.disconnect();
+    }
+
+    public void updateUverenjePogled(UverenjeOStudiranju uos) throws Exception {
+        dbBroker.connect();
+        dbBroker.update(uos);
+        dbBroker.disconnect();
+    }
+
+    public void deleteUverenjePogled(UverenjeOStudiranju uos) throws Exception {
+        dbBroker.connect();
+        dbBroker.delete(uos);
         dbBroker.disconnect();
     }
 

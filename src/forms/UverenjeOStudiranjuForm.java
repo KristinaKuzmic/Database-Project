@@ -164,6 +164,11 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
         });
 
         jButton3.setText("obrisi");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jLabel14.setText("Uverenje o studiranju - osnovno");
 
@@ -321,28 +326,65 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            // TODO add your handling code here:
-            
+
             UverenjeOStudiranju uos = preuzmiPodatkeSaForme();
-            
-            Controller.getInstance().insertUverenjePogled(uos);
-            
+
+            Controller.getInstance().updateUverenjePogled(uos);
+
             ModelTabeleStudiranjeDetalji model1 = (ModelTabeleStudiranjeDetalji) tblDetalji.getModel();
-            
+
             ModelTabeleStudiranjeOsnovno model2 = (ModelTabeleStudiranjeOsnovno) tblOsnovno.getModel();
-            
+
             model1.osvezi();
             model2.osvezi();
         } catch (Exception ex) {
             Logger.getLogger(UverenjeOStudiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            // TODO add your handling code here:
+
+            UverenjeOStudiranju uos = preuzmiPodatkeSaForme();
+
+            Controller.getInstance().insertUverenjePogled(uos);
+
+            ModelTabeleStudiranjeDetalji model1 = (ModelTabeleStudiranjeDetalji) tblDetalji.getModel();
+
+            ModelTabeleStudiranjeOsnovno model2 = (ModelTabeleStudiranjeOsnovno) tblOsnovno.getModel();
+
+            model1.osvezi();
+            model2.osvezi();
+        } catch (Exception ex) {
+            Logger.getLogger(UverenjeOStudiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+
+        try {
+            UverenjeOStudiranju uos = preuzmiPodatkeSaForme();
+            try {
+                Controller.getInstance().deleteUverenjePogled(uos);
+            } catch (Exception e) {
+            }
+
+            ModelTabeleStudiranjeDetalji model1 = (ModelTabeleStudiranjeDetalji) tblDetalji.getModel();
+
+            ModelTabeleStudiranjeOsnovno model2 = (ModelTabeleStudiranjeOsnovno) tblOsnovno.getModel();
+
+            model1.osvezi();
+            model2.osvezi();
+        } catch (Exception ex) {
+            Logger.getLogger(UverenjeOStudiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -498,19 +540,19 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
             txtStatus.setText(uverenje.getStatus());
             txtBrojPuta.setText(String.valueOf(uverenje.getBrojPutaUpisa()));
             txtGodinaStudija.setText(String.valueOf(uverenje.getGodinaStuidja()));
-            
-            if(uverenje.getNivoStudija()==null || uverenje.getNivoStudija().getNivoId()==0){
+
+            if (uverenje.getNivoStudija() == null || uverenje.getNivoStudija().getNivoId() == 0) {
                 cmbNivoStudija.setSelectedItem(null);
-            }else{
+            } else {
                 cmbNivoStudija.setSelectedItem(uverenje.getNivoStudija());
             }
-            
+
             if (uverenje.getStudent().getJmbg() == null || uverenje.getStudent().getJmbg().isEmpty()) {
                 cmbStudent.setSelectedItem(null);
             } else {
                 cmbStudent.setSelectedItem(uverenje.getStudent());
             }
-           
+
             if (uverenje.getFakultet().getFakultetId() != 0) {
                 List<Fakultet> fak = Controller.getInstance().findFakultet("fakultetid = " + uverenje.getFakultet().getFakultetId());
                 cmbFakultet.setSelectedItem(fak.get(0));
@@ -541,9 +583,11 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
                 if (!e.getValueIsAdjusting()) {
                     try {
                         ModelTabeleStudiranjeOsnovno model = (ModelTabeleStudiranjeOsnovno) tblOsnovno.getModel();
-                        Long redniBroj = model.getOsnovno().get(tblOsnovno.getSelectedRow()).getRedniBroj();
-                        uverenjaPogled = Controller.getInstance().findUverenje("rednibroj= " + redniBroj);
-                        popuniFormu(uverenjaPogled.get(0));
+                        if (tblOsnovno.getSelectedRow() >= 0) {
+                            Long redniBroj = model.getOsnovno().get(tblOsnovno.getSelectedRow()).getRedniBroj();
+                            uverenjaPogled = Controller.getInstance().findUverenje("rednibroj= " + redniBroj);
+                            popuniFormu(uverenjaPogled.get(0));
+                        }
                     } catch (Exception ex) {
                         Logger.getLogger(UverenjeOStudiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -572,7 +616,7 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
     }
 
     private UverenjeOStudiranju preuzmiPodatkeSaForme() {
-        SimpleDateFormat sdf = new SimpleDateFormat("DD-MM-YYYY");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Long rbr = Long.parseLong(txtRedniBroj.getText());
         Date datum = null;
         try {
@@ -586,13 +630,12 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
         int godStud = Integer.valueOf(txtGodinaStudija.getText());
         String napomena = txtNapomena.getText();
         Student s = (Student) cmbStudent.getSelectedItem();
-        Fakultet f= (Fakultet) cmbFakultet.getSelectedItem();
+        Fakultet f = (Fakultet) cmbFakultet.getSelectedItem();
         StudijskiProgram sp = (StudijskiProgram) cmbProgram.getSelectedItem();
         Zaposleni z = (Zaposleni) cmbZaposleni.getSelectedItem();
         NivoStudija ns = (NivoStudija) cmbNivoStudija.getSelectedItem();
-        
-        
-        UverenjeOStudiranju uos = new UverenjeOStudiranju(rbr, skolskaGod, status, 
+
+        UverenjeOStudiranju uos = new UverenjeOStudiranju(rbr, skolskaGod, status,
                 brojPuta, godStud, s, ns, sp, f, datum, napomena, z);
         System.out.println(uos.getDatum());
         return uos;
