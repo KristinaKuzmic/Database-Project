@@ -7,7 +7,9 @@ package domain.object.entities;
 import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -19,6 +21,19 @@ public class Ulica extends DomainObject{
     private Mesto mesto;
     private Grad grad;
     private String nazivUlice;
+
+    public Ulica() {
+    }
+
+    public Ulica(Long ulicaId, Mesto mesto, Grad grad, String nazivUlice) {
+        this.ulicaId = ulicaId;
+        this.mesto = mesto;
+        this.grad = grad;
+        this.nazivUlice = nazivUlice;
+    }
+    
+    
+    
 
     public Long getUlicaId() {
         return ulicaId;
@@ -55,12 +70,12 @@ public class Ulica extends DomainObject{
 
     @Override
     public String getTableName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " ulica ";
     }
 
     @Override
     public String getAllColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " * ";
     }
 
     @Override
@@ -95,22 +110,66 @@ public class Ulica extends DomainObject{
 
     @Override
     public List<DomainObject> getObjectsFromResultSet(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<DomainObject> ulice = new LinkedList<>();
+        while (rs.next()) {            
+            Long ulicaid = rs.getLong(1);
+            String naziv = rs.getString(2);
+            
+            Long pbr = rs.getLong(3);
+            Grad g = new Grad();
+            g.setPostanskiBroj(pbr);
+            
+            Long mestoid = rs.getLong(4);
+            Mesto m = new Mesto();
+            m.setMestoid(mestoid);
+            
+            Ulica u = new Ulica(ulicaid, m, g, naziv);
+            ulice.add(u);
+        }
+        return ulice;
     }
 
     @Override
     public String getOrderByColumn() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " ulicaid ";
     }
 
     @Override
     public String alijas() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " u ";
     }
 
     @Override
     public String getJoin() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "";
     }
+
+    @Override
+    public String toString() {
+        return nazivUlice;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Ulica other = (Ulica) obj;
+        return Objects.equals(this.ulicaId, other.ulicaId);
+    }
+    
+    
     
 }

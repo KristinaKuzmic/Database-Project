@@ -5,13 +5,17 @@
 package controller;
 
 import dbbroker.DBBroker;
+import domain.object.entities.Broj;
 import domain.object.entities.EvidencijaAdresa;
 import domain.object.entities.Fakultet;
+import domain.object.entities.Grad;
 import domain.object.entities.LicnaKarta;
+import domain.object.entities.Mesto;
 import domain.object.entities.NivoStudija;
 import domain.object.entities.Student;
 import domain.object.entities.StudentskiCentar;
 import domain.object.entities.StudijskiProgram;
+import domain.object.entities.Ulica;
 import domain.object.entities.Uplatnica;
 import domain.object.entities.UverenjeODiplomiranju;
 import domain.object.entities.UverenjeOStudiranju;
@@ -268,6 +272,34 @@ public class Controller {
         dbBroker.connect();
         dbBroker.delete(uos);
         dbBroker.disconnect();
+    }
+
+    public List<Grad> getAllGrad() throws Exception {
+        dbBroker.connect();
+        List<Grad> gradovi = (LinkedList<Grad>) (Object) dbBroker.getAll(new Grad());
+        dbBroker.disconnect();
+        return gradovi;
+    }
+
+    public List<Mesto> findMesto(String string) throws Exception {
+        dbBroker.connect();
+        List<Mesto> mesta = (LinkedList<Mesto>) (Object) dbBroker.getAllWithWhere(new Mesto(), string);
+        dbBroker.disconnect();
+        return mesta;
+    }
+
+    public List<Ulica> findUlica(String string) throws Exception {
+        dbBroker.connect();
+        List<Ulica> ulice = (LinkedList<Ulica>) (Object) dbBroker.getAllWithWhere(new Ulica(), string);
+        dbBroker.disconnect();
+        return ulice;
+    }
+
+    public List<Broj> findBroj(String string) throws Exception {
+        dbBroker.connect();
+        List<Broj> broj = (LinkedList<Broj>) (Object) dbBroker.getAllWithWhere(new Broj(), string);
+        dbBroker.disconnect();
+        return broj;
     }
 
 }

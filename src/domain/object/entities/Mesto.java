@@ -7,7 +7,9 @@ package domain.object.entities;
 import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -18,6 +20,17 @@ public class Mesto extends DomainObject{
     private Long mestoid;
     private Grad grad;
     private String naziv;
+
+    public Mesto() {
+    }
+
+    public Mesto(Long mestoid, Grad grad, String naziv) {
+        this.mestoid = mestoid;
+        this.grad = grad;
+        this.naziv = naziv;
+    }
+    
+    
 
     public Grad getGrad() {
         return grad;
@@ -47,12 +60,12 @@ public class Mesto extends DomainObject{
 
     @Override
     public String getTableName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " mesto ";
     }
 
     @Override
     public String getAllColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " * ";
     }
 
     @Override
@@ -87,22 +100,62 @@ public class Mesto extends DomainObject{
 
     @Override
     public List<DomainObject> getObjectsFromResultSet(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<DomainObject> mesta = new LinkedList<>();
+        while (rs.next()) {            
+            Long mestoid = rs.getLong(1);
+            String naziv = rs.getString(2);
+            
+            Long gradid =rs.getLong(3);
+            Grad g = new Grad();
+            g.setPostanskiBroj(gradid);
+            
+            Mesto m = new Mesto(mestoid, g, naziv);
+            mesta.add(m);
+        }
+        return mesta;
     }
 
     @Override
     public String getOrderByColumn() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " mestoid ";
     }
 
     @Override
     public String alijas() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return " m ";
     }
 
     @Override
     public String getJoin() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "";
     }
+
+    @Override
+    public String toString() {
+        return naziv;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Mesto other = (Mesto) obj;
+        return Objects.equals(this.mestoid, other.mestoid);
+    }
+    
+    
     
 }

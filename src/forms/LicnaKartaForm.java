@@ -5,10 +5,16 @@
 package forms;
 
 import controller.Controller;
+import domain.object.entities.Broj;
 import domain.object.entities.EvidencijaAdresa;
+import domain.object.entities.Grad;
 import domain.object.entities.LicnaKarta;
+import domain.object.entities.Mesto;
+import domain.object.entities.Ulica;
 import forms.models.ModelTabeleEvidencija;
 import forms.models.ModelTabeleLicnaKarta;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,6 +29,9 @@ import javax.swing.event.ListSelectionListener;
 public class LicnaKartaForm extends javax.swing.JFrame {
 
     private List<EvidencijaAdresa> evidencija = new LinkedList<>();
+    private List<Mesto> mesta = new LinkedList<>();
+    private List<Ulica> ulice = new LinkedList<>();
+    private List<Broj> broj = new LinkedList<>();
 
     /**
      * Creates new form LicnaKartaForm
@@ -33,6 +42,7 @@ public class LicnaKartaForm extends javax.swing.JFrame {
         ModelTabeleLicnaKarta model = new ModelTabeleLicnaKarta(Controller.getInstance().getAllLicnaKarta());
         tblLicnaKarta.setModel(model);
         setTableListener();
+        popuniComboBox();
     }
 
     /**
@@ -51,10 +61,10 @@ public class LicnaKartaForm extends javax.swing.JFrame {
         txtRedniBroj = new javax.swing.JTextField();
         txtDatum = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        cmbGrad = new javax.swing.JComboBox<>();
-        cmbMesto = new javax.swing.JComboBox<>();
-        cmbUlica = new javax.swing.JComboBox<>();
-        cmbBroj = new javax.swing.JComboBox<>();
+        cmbGrad = new javax.swing.JComboBox();
+        cmbMesto = new javax.swing.JComboBox();
+        cmbUlica = new javax.swing.JComboBox();
+        cmbBroj = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -88,13 +98,13 @@ public class LicnaKartaForm extends javax.swing.JFrame {
 
         jLabel3.setText("Datum promene adrese");
 
-        cmbGrad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbGrad.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        cmbMesto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbMesto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        cmbUlica.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbUlica.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        cmbBroj.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbBroj.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel4.setText("Grad");
 
@@ -277,10 +287,10 @@ public class LicnaKartaForm extends javax.swing.JFrame {
     private javax.swing.JButton btnIzmeniLicna;
     private javax.swing.JButton btnObrisi;
     private javax.swing.JButton btnSacuvaj;
-    private javax.swing.JComboBox<String> cmbBroj;
-    private javax.swing.JComboBox<String> cmbGrad;
-    private javax.swing.JComboBox<String> cmbMesto;
-    private javax.swing.JComboBox<String> cmbUlica;
+    private javax.swing.JComboBox cmbBroj;
+    private javax.swing.JComboBox cmbGrad;
+    private javax.swing.JComboBox cmbMesto;
+    private javax.swing.JComboBox cmbUlica;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -298,7 +308,7 @@ public class LicnaKartaForm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void popuniTabeluZaOdgovaracuLicnu(LicnaKarta lk) throws Exception {
-        evidencija = Controller.getInstance().findEvidencija("brojLicneKarte = "+lk.getBrojLicneKarte());
+        evidencija = Controller.getInstance().findEvidencija("brojLicneKarte = " + lk.getBrojLicneKarte());
         ModelTabeleEvidencija model = new ModelTabeleEvidencija(evidencija);
         tblEvidencijaAdresa.setModel(model);
     }
@@ -320,5 +330,97 @@ public class LicnaKartaForm extends javax.swing.JFrame {
 
         });
 
+    }
+
+    private void popuniComboBox() throws Exception {
+        List<Grad> gradovi = Controller.getInstance().getAllGrad();
+        cmbGrad.removeAllItems();
+        for (Grad grad : gradovi) {
+            cmbGrad.addItem(grad);
+        }
+        cmbGrad.setSelectedItem(null);
+
+        popuniMestaNaOsnovuIzabranogGrada();
+        popuniUlicuNaOsnovuIzabranogMesta();
+        popuniBrojNaOSnovuIzabraneUlice();
+    }
+
+    private List<Mesto> pronadjiMesta(Object selectedItem) throws Exception {
+        Grad g = (Grad) selectedItem;
+        return Controller.getInstance().findMesto("postanskibroj = " + g.getPostanskiBroj());
+    }
+
+    private List<Ulica> pronadjiUlice(Object selectedItem) throws Exception {
+        Mesto m = (Mesto) selectedItem;
+        return Controller.getInstance().findUlica("mestoid = " + m.getMestoid());
+    }
+
+    private List<Broj> pronadjiBroj(Object selectedItem) throws Exception {
+        Ulica u = (Ulica) selectedItem;
+        return Controller.getInstance().findBroj("ulicaid =" + u.getUlicaId());
+    }
+
+    private void popuniMestaNaOsnovuIzabranogGrada() {
+        cmbGrad.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    try {
+                        mesta = pronadjiMesta(cmbGrad.getSelectedItem());
+                        cmbMesto.removeAllItems();
+                        for (Mesto mesto : mesta) {
+                            cmbMesto.addItem(mesto);
+                        }
+                        cmbMesto.setSelectedItem(null);
+                    } catch (Exception ex) {
+                        Logger.getLogger(LicnaKartaForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+        });
+
+    }
+
+    private void popuniUlicuNaOsnovuIzabranogMesta() {
+        cmbMesto.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    try {
+                        ulice = pronadjiUlice(cmbMesto.getSelectedItem());
+                        cmbUlica.removeAllItems();
+                        for (Ulica u : ulice) {
+                            cmbUlica.addItem(u);
+                        }
+                        cmbUlica.setSelectedItem(null);
+                    } catch (Exception ex) {
+                        Logger.getLogger(LicnaKartaForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+        });
+    }
+
+    private void popuniBrojNaOSnovuIzabraneUlice() {
+        cmbUlica.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    try {
+                        broj = pronadjiBroj(cmbUlica.getSelectedItem());
+                        cmbBroj.removeAllItems();
+                        for (Broj b : broj) {
+                            cmbBroj.addItem(b);
+                        }
+                        cmbBroj.setSelectedItem(null);
+                    } catch (Exception ex) {
+                        Logger.getLogger(LicnaKartaForm.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+        });
     }
 }
