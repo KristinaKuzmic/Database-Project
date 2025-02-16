@@ -4,6 +4,7 @@
  */
 package forms.models;
 
+import controller.Controller;
 import domain.object.entities.EvidencijaAdresa;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -58,6 +59,11 @@ public class ModelTabeleEvidencija extends AbstractTableModel{
             default:
                 throw new AssertionError();
         }
+    }
+
+    public void osvezi(String par) throws Exception {
+        adrese = Controller.getInstance().findEvidencija(par);
+        fireTableDataChanged();
     }
     
     

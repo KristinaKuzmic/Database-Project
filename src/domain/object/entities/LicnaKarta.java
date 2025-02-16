@@ -120,7 +120,7 @@ public class LicnaKarta extends DomainObject{
 
     @Override
     public String getUpdateClause() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return String.format("ukupanbrojpromeneadresa= %d", brojPromeneAdrese);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class LicnaKarta extends DomainObject{
 
     @Override
     public String getUpdateWhereClause() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return String.format("brojlicnekarte = %d", brojLicneKarte);
     }
 
     @Override
@@ -160,5 +160,11 @@ public class LicnaKarta extends DomainObject{
     public String getOrderByColumn() {
         return " brojlicnekarte ";
     }
+
+    @Override
+    public String toString() {
+        return brojLicneKarte+"";
+    }
+    
     
 }

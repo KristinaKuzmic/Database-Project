@@ -4,6 +4,7 @@
  */
 package forms.models;
 
+import controller.Controller;
 import domain.object.entities.LicnaKarta;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -59,6 +60,32 @@ public class ModelTabeleLicnaKarta  extends AbstractTableModel{
                 throw new AssertionError();
         }
     }
+
+    public void osvezi() throws Exception {
+        licneKarte = Controller.getInstance().getAllLicnaKarta();
+        fireTableDataChanged();
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        if(columnIndex == 2) return true;
+        return false;
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        LicnaKarta lk = licneKarte.get(rowIndex);
+        switch (columnIndex) {
+            case 2:
+                lk.setBrojPromeneAdrese(Integer.parseInt((String)aValue));
+                fireTableCellUpdated(rowIndex, columnIndex);
+                break;
+            default:
+                throw new AssertionError();
+        }
+    }
+    
+    
     
     
     

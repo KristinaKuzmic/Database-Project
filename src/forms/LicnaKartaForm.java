@@ -15,10 +15,14 @@ import forms.models.ModelTabeleEvidencija;
 import forms.models.ModelTabeleLicnaKarta;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComboBox;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -43,6 +47,7 @@ public class LicnaKartaForm extends javax.swing.JFrame {
         tblLicnaKarta.setModel(model);
         setTableListener();
         popuniComboBox();
+        setTableListenerEvidencija();
     }
 
     /**
@@ -130,8 +135,18 @@ public class LicnaKartaForm extends javax.swing.JFrame {
         jLabel5.setText("Evidencija adresa");
 
         btnObrisi.setText("obrisi");
+        btnObrisi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnObrisiActionPerformed(evt);
+            }
+        });
 
         btnIzmeni.setText("izmeni");
+        btnIzmeni.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIzmeniActionPerformed(evt);
+            }
+        });
 
         btnSacuvaj.setText("sacuvaj");
         btnSacuvaj.addActionListener(new java.awt.event.ActionListener() {
@@ -141,6 +156,11 @@ public class LicnaKartaForm extends javax.swing.JFrame {
         });
 
         btnIzmeniLicna.setText("izmeni");
+        btnIzmeniLicna.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIzmeniLicnaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -241,7 +261,74 @@ public class LicnaKartaForm extends javax.swing.JFrame {
 
     private void btnSacuvajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacuvajActionPerformed
         // TODO add your handling code here:
+        EvidencijaAdresa ea = preuzmiPodatke();
+        if (ea != null) {
+            try {
+                Controller.getInstance().insertEvidencija(ea);
+                ModelTabeleEvidencija model = (ModelTabeleEvidencija) tblEvidencijaAdresa.getModel();
+                model.osvezi("brojLicneKarte = " + ea.getLicnaKarta().getBrojLicneKarte());
+
+                ModelTabeleLicnaKarta model2 = (ModelTabeleLicnaKarta) tblLicnaKarta.getModel();
+                model2.osvezi();
+                cleanCode();
+            } catch (Exception ex) {
+                Logger.getLogger(LicnaKartaForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
     }//GEN-LAST:event_btnSacuvajActionPerformed
+
+    private void btnIzmeniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmeniActionPerformed
+        // TODO add your handling code here:
+
+        EvidencijaAdresa ea = preuzmiPodatke();
+        if (ea != null) {
+            try {
+                Controller.getInstance().updateEvidencija(ea);
+                ModelTabeleEvidencija model = (ModelTabeleEvidencija) tblEvidencijaAdresa.getModel();
+                model.osvezi("brojLicneKarte = " + ea.getLicnaKarta().getBrojLicneKarte());
+
+                ModelTabeleLicnaKarta model2 = (ModelTabeleLicnaKarta) tblLicnaKarta.getModel();
+                model2.osvezi();
+                cleanCode();
+            } catch (Exception ex) {
+                Logger.getLogger(LicnaKartaForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnIzmeniActionPerformed
+
+    private void btnObrisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiActionPerformed
+        // TODO add your handling code here:
+
+        EvidencijaAdresa ea = preuzmiPodatke();
+        if (ea != null) {
+            try {
+                Controller.getInstance().deleteEvidencija(ea);
+                ModelTabeleEvidencija model = (ModelTabeleEvidencija) tblEvidencijaAdresa.getModel();
+                model.osvezi("brojLicneKarte = " + ea.getLicnaKarta().getBrojLicneKarte());
+
+                ModelTabeleLicnaKarta model2 = (ModelTabeleLicnaKarta) tblLicnaKarta.getModel();
+                model2.osvezi();
+                cleanCode();
+            } catch (Exception ex) {
+                Logger.getLogger(LicnaKartaForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnObrisiActionPerformed
+
+    private void btnIzmeniLicnaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmeniLicnaActionPerformed
+        // TODO add your handling code here:
+        try {
+            ModelTabeleLicnaKarta model = (ModelTabeleLicnaKarta) tblLicnaKarta.getModel();
+            if (tblLicnaKarta.getSelectedRow() >= 0) {
+                LicnaKarta lk = model.getLicneKarte().get(tblLicnaKarta.getSelectedRow());
+                Controller.getInstance().updateLicnaKarta(lk);
+                model.osvezi();
+            }
+        } catch (Exception e) {
+        }
+
+    }//GEN-LAST:event_btnIzmeniLicnaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -319,9 +406,11 @@ public class LicnaKartaForm extends javax.swing.JFrame {
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
                     try {
-                        ModelTabeleLicnaKarta model = (ModelTabeleLicnaKarta) tblLicnaKarta.getModel();
-                        LicnaKarta lk = model.getLicneKarte().get(tblLicnaKarta.getSelectedRow());
-                        popuniTabeluZaOdgovaracuLicnu(lk);
+                        if (tblLicnaKarta.getSelectedRow() >= 0) {
+                            ModelTabeleLicnaKarta model = (ModelTabeleLicnaKarta) tblLicnaKarta.getModel();
+                            LicnaKarta lk = model.getLicneKarte().get(tblLicnaKarta.getSelectedRow());
+                            popuniTabeluZaOdgovaracuLicnu(lk);
+                        }
                     } catch (Exception ex) {
                         Logger.getLogger(LicnaKartaForm.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -422,5 +511,74 @@ public class LicnaKartaForm extends javax.swing.JFrame {
             }
 
         });
+    }
+
+    private void setTableListenerEvidencija() {
+        tblEvidencijaAdresa.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    ModelTabeleEvidencija model = (ModelTabeleEvidencija) tblEvidencijaAdresa.getModel();
+                    if (tblEvidencijaAdresa.getSelectedRow() >= 0) {
+                        popuniFormu(model.getAdrese().get(tblEvidencijaAdresa.getSelectedRow()));
+                    } else {
+                        cleanCode();
+                    }
+                }
+            }
+
+            private void popuniFormu(EvidencijaAdresa a) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                System.out.println(a.getBroj());
+                txtRedniBroj.setText(a.getEvidencijaid() + "");
+                if (a.getDatumPromeneAdrese() == null) {
+                    txtDatum.setText(null);
+                } else {
+                    txtDatum.setText(sdf.format(a.getDatumPromeneAdrese()) + "");
+                }
+                cmbGrad.setSelectedItem(a.getGrad());
+                cmbMesto.setSelectedItem(a.getMesto());
+                cmbUlica.setSelectedItem(a.getUlica());
+                cmbBroj.setSelectedItem(a.getBroj());
+
+            }
+
+        });
+    }
+
+    private EvidencijaAdresa preuzmiPodatke() {
+        if (tblLicnaKarta.getSelectedRow() >= 0) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+            Long evidencijaId = Long.valueOf(txtRedniBroj.getText());
+            String datumStr = txtDatum.getText();
+            Date datum = null;
+
+            try {
+                datum = sdf.parse(datumStr);
+            } catch (ParseException ex) {
+                Logger.getLogger(LicnaKartaForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            Grad g = (Grad) cmbGrad.getSelectedItem();
+            Mesto m = (Mesto) cmbMesto.getSelectedItem();
+            Ulica u = (Ulica) cmbUlica.getSelectedItem();
+            Broj b = (Broj) cmbBroj.getSelectedItem();
+
+            ModelTabeleLicnaKarta model = (ModelTabeleLicnaKarta) tblLicnaKarta.getModel();
+            LicnaKarta lk = model.getLicneKarte().get(tblLicnaKarta.getSelectedRow());
+            EvidencijaAdresa ae = new EvidencijaAdresa(datum, lk, b, u, m, g, evidencijaId);
+            return ae;
+        }
+        return null;
+    }
+
+    private void cleanCode() {
+        txtRedniBroj.setText("");
+        txtDatum.setText("");
+        cmbGrad.setSelectedItem(null);
+        cmbMesto.setSelectedItem(null);
+        cmbUlica.setSelectedItem(null);
+        cmbBroj.setSelectedItem(null);
     }
 }

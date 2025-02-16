@@ -302,4 +302,33 @@ public class Controller {
         return broj;
     }
 
+    public void insertEvidencija(EvidencijaAdresa ea) throws Exception {
+        dbBroker.connect();
+        dbBroker.insert(ea);
+        dbBroker.disconnect();
+    }
+
+    public void updateEvidencija(EvidencijaAdresa ea) throws Exception {
+        dbBroker.connect();
+        dbBroker.update(ea);
+        dbBroker.disconnect();
+    }
+
+    public void deleteEvidencija(EvidencijaAdresa ea) throws Exception {
+        dbBroker.connect();
+        dbBroker.delete(ea);
+        dbBroker.disconnect();
+    }
+
+    public void updateLicnaKarta(LicnaKarta lk) throws Exception {
+        dbBroker.connect();
+        try {
+            dbBroker.update(lk);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        dbBroker.disconnect();
+       
+    }
+
 }

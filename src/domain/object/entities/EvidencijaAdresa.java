@@ -7,6 +7,7 @@ package domain.object.entities;
 import domain.object.DomainObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -110,17 +111,25 @@ public class EvidencijaAdresa extends DomainObject{
 
     @Override
     public String getAllInsertColumnNames() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "evidencijaid, datumpromeneadrese, brojlicnekarte, brojid, ulicaid, mestoid, postanskibroj";
     }
 
     @Override
     public String getColumnValues() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String datumString = datumPromeneAdrese != null ? "TO_DATE('" + sdf.format(datumPromeneAdrese) + "', 'dd-MM-yy')" : "NULL";
+        return String.format("%d, %s, %d, %d, %d, %d, %d", evidencijaid, datumString,licnaKarta.getBrojLicneKarte(),
+                broj.getBrojId(), ulica.getUlicaId(), mesto.getMestoid(), grad.getPostanskiBroj());
     }
 
     @Override
     public String getUpdateClause() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String datumString = datumPromeneAdrese != null ? "TO_DATE('" + sdf.format(datumPromeneAdrese) + "', 'dd-MM-yy')" : "NULL";
+        return String.format("evidencijaid = %d, datumpromeneadrese = %s, "
+                + "brojlicnekarte = %d, brojid= %d, ulicaid = %d, mestoid= %d, postanskibroj = %d", evidencijaid, 
+                datumString,licnaKarta.getBrojLicneKarte(),
+                broj.getBrojId(), ulica.getUlicaId(), mesto.getMestoid(), grad.getPostanskiBroj());
     }
 
     @Override
@@ -130,12 +139,12 @@ public class EvidencijaAdresa extends DomainObject{
 
     @Override
     public String getUpdateWhereClause() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return String.format("evidencijaid = %d and brojlicnekarte = %d ", evidencijaid, licnaKarta.getBrojLicneKarte());
     }
 
     @Override
     public String getDeleteWhereClause() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return String.format("evidencijaid = %d and brojlicnekarte = %d ", evidencijaid, licnaKarta.getBrojLicneKarte());
     }
 
     @Override
