@@ -290,16 +290,16 @@ public class UplatnicaForm extends javax.swing.JFrame {
             // TODO add your handling code here:
             ModelTabeleUplatnica mtu = (ModelTabeleUplatnica) tblUplatnica.getModel();
             Uplatnica u = mtu.getUplatnice().get(tblUplatnica.getSelectedRow());
-            
+
             String setClause = generisiSetClause(tblUplatnica, tblUplatnica.getSelectedRow());
-            
+
             Controller.getInstance().updateUplatnica(u, setClause);
-            
+
             mtu.osvezi();
         } catch (Exception ex) {
             Logger.getLogger(UplatnicaForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtPozivNaBrojActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPozivNaBrojActionPerformed
@@ -310,9 +310,9 @@ public class UplatnicaForm extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             Uplatnica u = preuzmiPodatke();
-            
+
             Controller.getInstance().insertUplatnica(u);
-            
+
             ModelTabeleUplatnica mtu = (ModelTabeleUplatnica) tblUplatnica.getModel();
             mtu.osvezi();
         } catch (Exception ex) {
@@ -439,13 +439,13 @@ public class UplatnicaForm extends javax.swing.JFrame {
         if (izbranaUplatnica != null) {
             txtUplatnicaId.setText(String.valueOf(izbranaUplatnica.getUplatnicaId()));
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-            if(izbranaUplatnica.getDatum()==null){
+            if (izbranaUplatnica.getDatum() == null) {
                 txtDatum.setText(null);
-            }else{
+            } else {
                 txtDatum.setText(dateFormat.format(izbranaUplatnica.getDatum()));
 
             }
-            
+
             txtIznos.setText(String.valueOf(izbranaUplatnica.getIznos()));
             txtPozivNaBroj.setText(String.valueOf(izbranaUplatnica.getPozivNaBroj()));
             txtSifraPlacanja.setText(String.valueOf(izbranaUplatnica.getSifraPlacanja()));
@@ -469,13 +469,22 @@ public class UplatnicaForm extends javax.swing.JFrame {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    ModelTabeleUplatnica mtu = (ModelTabeleUplatnica) tblUplatnica.getModel();
-                    Uplatnica izbranaUplatnica = mtu.getUplatnice().get(tblUplatnica.getSelectedRow());
-                    popuniFormuIzabranomUplatnicom(izbranaUplatnica);
+                    if (tblUplatnica.getSelectedRow() >= 0) {
+                        ModelTabeleUplatnica mtu = (ModelTabeleUplatnica) tblUplatnica.getModel();
+                        Uplatnica izbranaUplatnica = mtu.getUplatnice().get(tblUplatnica.getSelectedRow());
+                        popuniFormuIzabranomUplatnicom(izbranaUplatnica);
+                    } else {
+                        cleanCode();
+                    }
+
                 }
             }
 
         });
+    }
+
+    private void cleanCode() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     private void sacuvajOriginalneVrednosti(JTable tblUplatnica) {
@@ -486,7 +495,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
             String nazivsc = (String) mtu.getValueAt(i, 4);
 
             orinalneVrednosti.put(i, new String[]{String.valueOf(scid), nazivsc});
-                        System.out.println(orinalneVrednosti.get(0)[0]);
+            System.out.println(orinalneVrednosti.get(0)[0]);
 
             System.out.println(orinalneVrednosti.get(0)[1]);
         }
@@ -494,7 +503,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
     }
 
     private void ucitajNazivSC(StudentskiCentar scid) throws Exception {
-        pronadjeniCentri = Controller.getInstance().findCentar("scid="+scid.getScId()+"");
+        pronadjeniCentri = Controller.getInstance().findCentar("scid=" + scid.getScId() + "");
         txtNazivCentra.setText(pronadjeniCentri.get(0).getNaziv());
     }
 
@@ -504,7 +513,7 @@ public class UplatnicaForm extends javax.swing.JFrame {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     try {
-                        ucitajNazivSC((StudentskiCentar)cmbSCentar.getSelectedItem());
+                        ucitajNazivSC((StudentskiCentar) cmbSCentar.getSelectedItem());
                     } catch (Exception ex) {
                     }
                 }
@@ -516,41 +525,40 @@ public class UplatnicaForm extends javax.swing.JFrame {
     private String generisiSetClause(JTable tblUplatnica, int selectedRow) {
         ModelTabeleUplatnica mtu = (ModelTabeleUplatnica) this.tblUplatnica.getModel();
         StringBuilder stringBuilder = new StringBuilder(" ");
-        
+
         Long scid = (Long) mtu.getValueAt(selectedRow, 3);
         String nazivSC = (String) mtu.getValueAt(selectedRow, 4);
 
-        
         String scidStr = String.valueOf(scid);
-        
+
         String[] original = orinalneVrednosti.get(selectedRow);
         String orgSCID = original[0];
         String orgNaziv = original[1];
-        
+
         boolean needComma = false;
-        
+
         if (!scidStr.equals(orgSCID)) {
-            System.out.println("poredimo sad '"+scidStr+"' sa '"+orgSCID+"'");
+            System.out.println("poredimo sad '" + scidStr + "' sa '" + orgSCID + "'");
             stringBuilder.append("scid = '").append(scid).append("'");
             needComma = true;
         }
         if (!nazivSC.equals(orgNaziv)) {
-            System.out.println("poredim '"+nazivSC+"' sa '"+orgNaziv+"'");
+            System.out.println("poredim '" + nazivSC + "' sa '" + orgNaziv + "'");
             if (needComma) {
                 stringBuilder.append(", ");
             }
             stringBuilder.append("naziv_sc = '").append(nazivSC).append("'");
         }
         return stringBuilder.toString();
-        
+
     }
 
     private Uplatnica preuzmiPodatke() {
         SimpleDateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date date = null;
         String datum = txtDatum.getText();
-        
-        if(!datum.isEmpty()){
+
+        if (!datum.isEmpty()) {
             try {
                 date = inputFormat.parse(datum);
             } catch (ParseException ex) {
@@ -562,13 +570,13 @@ public class UplatnicaForm extends javax.swing.JFrame {
         int pozivNaBroj = Integer.parseInt(txtPozivNaBroj.getText());
         int sifra = Integer.parseInt(txtSifraPlacanja.getText());
         int model = Integer.parseInt(txtModel.getText());
-        
-        Uplatnica u = new Uplatnica(id, date, isnos, pozivNaBroj, 
-                sifra, txtMesto.getText(), 
-                model, txtRacunPlatioca.getText(), txtRacunPrimaoca.getText(), 
-                txtSvrhaUplate.getText(), (StudentskiCentar) cmbSCentar.getSelectedItem(), 
+
+        Uplatnica u = new Uplatnica(id, date, isnos, pozivNaBroj,
+                sifra, txtMesto.getText(),
+                model, txtRacunPlatioca.getText(), txtRacunPrimaoca.getText(),
+                txtSvrhaUplate.getText(), (StudentskiCentar) cmbSCentar.getSelectedItem(),
                 (Student) cmbStudent.getSelectedItem(), (Valuta) cmbValuta.getSelectedItem(), "");
-        
+
         return u;
     }
 }

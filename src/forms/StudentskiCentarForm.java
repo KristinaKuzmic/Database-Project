@@ -7,6 +7,7 @@ package forms;
 import controller.Controller;
 import domain.object.entities.StudentskiCentar;
 import forms.models.ModelTabeleStudentskiCentar;
+import forms.models.ModelTabeleUplatnica;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.ListSelectionEvent;
@@ -27,6 +28,8 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
         ModelTabeleStudentskiCentar model = new ModelTabeleStudentskiCentar(Controller.getInstance().getAllStudentskiCentar());
         tblSC.setModel(model);
         setTableListener();
+        ModelTabeleUplatnica model2 = new ModelTabeleUplatnica(Controller.getInstance().getAllUplatnica());
+        tblUplatnica.setModel(model2);
     }
 
     /**
@@ -47,6 +50,9 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
         txtNaziv = new javax.swing.JTextField();
         btnSacuvaj = new javax.swing.JButton();
         btnIzmeni = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblUplatnica = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -83,6 +89,21 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
             }
         });
 
+        tblUplatnica.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tblUplatnica);
+
+        jLabel4.setText("Uplatnica");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,10 +111,7 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 798, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(102, 102, 102)
@@ -106,7 +124,13 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
                                 .addComponent(btnSacuvaj)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnIzmeni))
-                            .addComponent(txtNaziv))))
+                            .addComponent(txtNaziv)))
+                    .addComponent(jScrollPane2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -129,7 +153,11 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSacuvaj)
                     .addComponent(btnIzmeni))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addComponent(jLabel4)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(57, Short.MAX_VALUE))
         );
 
         pack();
@@ -159,6 +187,9 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
 
             ModelTabeleStudentskiCentar model = (ModelTabeleStudentskiCentar) tblSC.getModel();
             model.osvezi();
+            
+            ModelTabeleUplatnica model2= (ModelTabeleUplatnica) tblUplatnica.getModel();
+            model2.osvezi();
         } catch (Exception ex) {
             Logger.getLogger(StudentskiCentarForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -209,8 +240,11 @@ public class StudentskiCentarForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblSC;
+    private javax.swing.JTable tblUplatnica;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNaziv;
     // End of variables declaration//GEN-END:variables

@@ -178,13 +178,22 @@ public class UverenjeOStudiranju extends DomainObject {
 
         return String.format("%d, '%s', '%s', %d, '%s', %d, %d, %d, %d, %s, '%s', %d", redniBroj, skolskaGodina,
                 status, brojPutaUpisa, student.getJmbg(),
-                godinaStuidja, nivoStudija.getNivoId(), program.getProgramId(), fakultet.getFakultetId(),datumString,
-                 napomena, zaposleni.getZaposleniId());
+                godinaStuidja, nivoStudija.getNivoId(), program.getProgramId(), fakultet.getFakultetId(), datumString,
+                napomena, zaposleni.getZaposleniId());
     }
 
     @Override
     public String getUpdateClause() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        String datumString = datum != null ? "TO_DATE('" + sdf.format(datum) + "', 'DD-MM-YY')" : "NULL";
+
+        return String.format("rednibroj = %d, skolskagodina = '%s', status = '%s', "
+                + "brojputaupisa = %d, jmbg = '%s', godinastudija = %d, nivoid = %d, programid = %d, "
+                + "fakultetid = %d, datum = %s, napomena = '%s', zaposleniid = %d", 
+                redniBroj, skolskaGodina,
+                status, brojPutaUpisa, student.getJmbg(),
+                godinaStuidja, nivoStudija.getNivoId(), program.getProgramId(), fakultet.getFakultetId(), datumString,
+                napomena, zaposleni.getZaposleniId());
     }
 
     @Override

@@ -338,6 +338,7 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
 
             model1.osvezi();
             model2.osvezi();
+            cleanCode();
         } catch (Exception ex) {
             Logger.getLogger(UverenjeOStudiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -358,6 +359,7 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
 
             model1.osvezi();
             model2.osvezi();
+            cleanCode();
         } catch (Exception ex) {
             Logger.getLogger(UverenjeOStudiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -381,6 +383,7 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
 
             model1.osvezi();
             model2.osvezi();
+            cleanCode();
         } catch (Exception ex) {
             Logger.getLogger(UverenjeOStudiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -534,7 +537,12 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
     private void popuniFormu(UverenjeOStudiranju uverenje) throws Exception {
         if (uverenje != null) {
             txtRedniBroj.setText(String.valueOf(uverenje.getRedniBroj()));
-            txtDatum.setText(String.valueOf(uverenje.getDatum()));
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            if (uverenje.getDatum() == null) {
+                txtDatum.setText(null);
+            } else {
+                txtDatum.setText(sdf.format(uverenje.getDatum()));
+            }
             txtNapomena.setText(uverenje.getNapomena());
             txtSkolskagodina.setText(uverenje.getSkolskaGodina());
             txtStatus.setText(uverenje.getStatus());
@@ -587,6 +595,8 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
                             Long redniBroj = model.getOsnovno().get(tblOsnovno.getSelectedRow()).getRedniBroj();
                             uverenjaPogled = Controller.getInstance().findUverenje("rednibroj= " + redniBroj);
                             popuniFormu(uverenjaPogled.get(0));
+                        } else {
+                            cleanCode();
                         }
                     } catch (Exception ex) {
                         Logger.getLogger(UverenjeOStudiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -604,9 +614,14 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
                 if (!e.getValueIsAdjusting()) {
                     try {
                         ModelTabeleStudiranjeDetalji model = (ModelTabeleStudiranjeDetalji) tblDetalji.getModel();
-                        Long redniBroj = model.getUverenje().get(tblDetalji.getSelectedRow()).getRedniBroj();
-                        uverenjaPogled = Controller.getInstance().findUverenje("rednibroj =" + redniBroj);
-                        popuniFormu(uverenjaPogled.get(0));
+                        if (tblDetalji.getSelectedRow() >= 0) {
+                            Long redniBroj = model.getUverenje().get(tblDetalji.getSelectedRow()).getRedniBroj();
+                            uverenjaPogled = Controller.getInstance().findUverenje("rednibroj =" + redniBroj);
+                            popuniFormu(uverenjaPogled.get(0));
+                        }else{
+                            cleanCode();
+                        }
+
                     } catch (Exception ex) {
                         Logger.getLogger(UverenjeOStudiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -639,5 +654,27 @@ public class UverenjeOStudiranjuForm extends javax.swing.JFrame {
                 brojPuta, godStud, s, ns, sp, f, datum, napomena, z);
         System.out.println(uos.getDatum());
         return uos;
+    }
+
+    private void cleanCode() {
+        txtRedniBroj.setText("");
+        txtDatum.setText("");
+        txtNapomena.setText("");
+        txtSkolskagodina.setText("");
+
+        txtStatus.setText("");
+        txtBrojPuta.setText("");
+        txtGodinaStudija.setText("");
+
+        cmbNivoStudija.setSelectedItem(null);
+
+        cmbStudent.setSelectedItem(null);
+
+        cmbFakultet.setSelectedItem(null);
+
+        cmbProgram.setSelectedItem(null);
+
+        cmbZaposleni.setSelectedItem(null);
+
     }
 }

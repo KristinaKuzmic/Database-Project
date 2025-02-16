@@ -446,8 +446,13 @@ public class UverenjeODiplomiranjuForm extends javax.swing.JFrame {
                 if (!e.getValueIsAdjusting()) {
                     try {
                         ModelTabeleDiplomiranje model = (ModelTabeleDiplomiranje) tblDiplomiranje.getModel();
-                        UverenjeODiplomiranju ud = model.getDiplomiranja().get(tblDiplomiranje.getSelectedRow());
-                        popuniFormuIzabranimDiplomiranjem(ud);
+                        if (tblDiplomiranje.getSelectedRow() >= 0) {
+                            UverenjeODiplomiranju ud = model.getDiplomiranja().get(tblDiplomiranje.getSelectedRow());
+                            popuniFormuIzabranimDiplomiranjem(ud);
+                        } else {
+                            cleanCode();
+                        }
+
                     } catch (Exception ex) {
                         Logger.getLogger(UverenjeODiplomiranjuForm.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -455,6 +460,20 @@ public class UverenjeODiplomiranjuForm extends javax.swing.JFrame {
             }
 
         });
+    }
+
+    private void cleanCode() {
+        txtRedniBroj.setText("");
+        txtDatumIzdavanja.setText("");
+        txtDatumZavrsetka.setText("");
+        txtGodinaUpisa.setText("");
+        txtNaplata.setText("");
+        txtProsecnaOcena.setText("");
+        txtZvanje.setText("");
+        cmbFakultet.setSelectedItem(null);
+        cmbProgram.setSelectedItem(null);
+        cmbStudent.setSelectedItem(null);
+        cmbZaposleni.setSelectedItem(null);
     }
 
     private void setRadioButtonListener() {
@@ -541,7 +560,6 @@ public class UverenjeODiplomiranjuForm extends javax.swing.JFrame {
         cmbStudent.setSelectedItem(null);
     }
 
-
     private void popuniFakultet() throws Exception {
         List<Fakultet> fakulteti = Controller.getInstance().getAllFakulteti();
         cmbFakultet.removeAllItems();
@@ -577,7 +595,7 @@ public class UverenjeODiplomiranjuForm extends javax.swing.JFrame {
 
     private List<Zaposleni> pronadjiZaposlene(Object selectedItem) throws Exception {
         Fakultet fak = (Fakultet) selectedItem;
-        return Controller.getInstance().findZaposleni("fakultetid = "+fak.getFakultetId());
+        return Controller.getInstance().findZaposleni("fakultetid = " + fak.getFakultetId());
     }
 
     private List<StudijskiProgram> pronadjiPrograme(Object selectedItem) throws Exception {
@@ -606,8 +624,8 @@ public class UverenjeODiplomiranjuForm extends javax.swing.JFrame {
         Fakultet f = (Fakultet) cmbFakultet.getSelectedItem();
         StudijskiProgram sp = (StudijskiProgram) cmbProgram.getSelectedItem();
         String zvanje = txtZvanje.getText();
-        
-        UverenjeODiplomiranju ud = new UverenjeODiplomiranju(redniBroj, datumIzdavanja, godinaUpisa, 
+
+        UverenjeODiplomiranju ud = new UverenjeODiplomiranju(redniBroj, datumIzdavanja, godinaUpisa,
                 prosecnaOcena, naplata, datumZavrsetka, s, z, sp, f, zvanje);
         return ud;
     }
